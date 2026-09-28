@@ -1,16 +1,148 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Costura Inovadora</title>
-    </head>
-    <body>
-        <h1>Costura Inovadora</h1>
-        <p>Sistema de gerenciamento de pedidos</p>
 
-        <hr>
-        <h2>Bem-vindo!</h2>
-        <p>Esta é a nova versão do sistema, desenvolvida com Flask</p>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Costura Inovadora</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- Menu lateral -->
+        <aside class="sidebar">
+
+            <h1>
+                Costura<br>
+                Inovadora
+            </h1>
+
+            <nav aria-label="Menu principal">
+                <a href="/" class="active">Clientes</a>
+                <a href="#">Pedidos</a>
+                <a href="#">Serviços</a>
+                <a href="#">Orçamentos</a>
+            </nav>
+
+        </aside>
+
+
+        <!-- Conteúdo principal -->
+        <main class="content">
+
+            <header class="page-header">
+                <div>
+                    <h2>Clientes</h2>
+                    <p>Gerencie os clientes.</p>
+                </div>
+            </header>
+
+
+            <!-- Cadastro de clientes -->
+            <section class="panel" aria-labelledby="form-title">
+
+                <h3 id="form-title">Cadastrar Cliente</h3>
+
+                <form>
+
+                    <div class="form-group">
+                        <label for="nome">Nome completo</label>
+
+                        <input
+                            type="text"
+                            id="nome"
+                            name="nome"
+                            placeholder="Digite o nome do cliente"
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="telefone">Telefone</label>
+
+                        <input
+                            type="tel"
+                            id="telefone"
+                            name="telefone"
+                            placeholder="Digite o telefone do cliente"
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Digite o email do cliente"
+                        >
+                    </div>
+
+                </form>
+
+            </section>
+
+
+            <!-- Lista de clientes -->
+            <section class="panel" aria-labelledby="list-title">
+
+                <h3 id="list-title">Clientes cadastrados</h3>
+
+
+                {% if clientes %}
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for cliente in clientes %}
+
+                                <tr>
+                                    <td>{{ cliente.nome }}</td>
+                                    <td>{{ cliente.telefone }}</td>
+                                    <td>{{ cliente.email }}</td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+
+                {% else %}
+
+                    <p class="empty-message">
+                        Nenhum cliente cadastrado.
+                    </p>
+
+                {% endif %}
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
 </html>
