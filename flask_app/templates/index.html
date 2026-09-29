@@ -103,6 +103,7 @@
 
                 <h3 id="list-title">Clientes cadastrados</h3>
 
+                <a href="{{ url_for('clientes_inativos') }}" class="button-link">Ver Clientes Inativos</a>
 
                 {% if clientes %}
 
@@ -113,6 +114,7 @@
                                 <th>Nome</th>
                                 <th>Telefone</th>
                                 <th>Email</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
 
@@ -125,14 +127,22 @@
                                     <td>{{ cliente.nome }}</td>
                                     <td>{{ cliente.telefone }}</td>
                                     <td>{{ cliente.email }}</td>
+                                    
+                                    <td class="actions">
+                                        <a href="{{ url_for('editar', id_cliente=cliente.id_cliente) }}"
+                                        class="button-link">Editar</a>
+
+                                        <form method="POST" action="{{ url_for('inativar', id_cliente=cliente.id_cliente) }}"
+                                        class="inline-form">
+                                            <button type="submit" class="button-danger">Inativar</button>
+                                        </form>
+                                    </td>
                                 </tr>
 
                             {% endfor %}
 
                         </tbody>
-
                     </table>
-
 
                 {% else %}
 
@@ -143,11 +153,7 @@
                 {% endif %}
 
             </section>
-
         </main>
-
     </div>
-
 </body>
-
 </html>

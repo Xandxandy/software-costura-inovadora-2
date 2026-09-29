@@ -144,3 +144,50 @@ button:hover {
         padding: 22px 16px;
     }
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e7e5e4;
+}
+
+th {
+    font-size: 14px;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inline-form {
+    margin: 0;
+}
+
+.button-link {
+    display: inline-block;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #64796b;
+    color: white;
+    text-decoration: none;
+}
+
+.button-link:hover {
+    background: #53665a;
+}
+
+.button-danger {
+    background: #8b3a3a;
+}
+
+.button-danger:hover {
+    background: #702f2f;
+}
