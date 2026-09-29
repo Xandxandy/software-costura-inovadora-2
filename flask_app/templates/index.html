@@ -51,7 +51,7 @@
 
                 <h3 id="form-title">Cadastrar Cliente</h3>
 
-                <form>
+                <form method="POST" action="{{ url_for('inicio') }}">
 
                     <div class="form-group">
                         <label for="nome">Nome completo</label>
@@ -61,6 +61,7 @@
                             id="nome"
                             name="nome"
                             placeholder="Digite o nome do cliente"
+                            required
                         >
                     </div>
 
@@ -73,6 +74,7 @@
                             id="telefone"
                             name="telefone"
                             placeholder="Digite o telefone do cliente"
+                            required
                         >
                     </div>
 
@@ -85,8 +87,11 @@
                             id="email"
                             name="email"
                             placeholder="Digite o email do cliente"
+                            required
                         >
                     </div>
+
+                    <button type="submit">Cadastrar Cliente</button>
 
                 </form>
 
