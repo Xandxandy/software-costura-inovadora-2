@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Editar Serviço</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <h1>
+                Costura<br>
+                Inovadora
+            </h1>
+
+            <nav aria-label="Menu principal">
+                <a href="{{ url_for('inicio') }}">Clientes</a>
+                <a href="#">Pedidos</a>
+                <a href="{{ url_for('servicos') }}" class="active">Serviços</a>
+                <a href="#">Orçamentos</a>
+            </nav>
+
+        </aside>
+
+
+        <main class="content">
+
+            <header class="page-header">
+                <div>
+                    <h2>Editar Serviço</h2>
+                    <p>Altere as informações do serviço.</p>
+                </div>
+            </header>
+
+
+            <section class="panel">
+
+                <form method="POST">
+
+                    <div class="form-group">
+
+                        <label for="nome_servico">
+                            Nome do serviço
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nome_servico"
+                            name="nome_servico"
+                            value="{{ servico.nome_servico }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="preco_base">
+                            Preço base
+                        </label>
+
+                        <input
+                            type="number"
+                            id="preco_base"
+                            name="preco_base"
+                            value="{{ servico.preco_base }}"
+                            step="0.01"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Salvar alterações
+                    </button>
+
+                    <a
+                        href="{{ url_for('servicos') }}"
+                        class="button-link"
+                    >
+                        Cancelar
+                    </a>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

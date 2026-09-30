@@ -18,6 +18,14 @@ from back.clientes import (
     reativar_cliente
 )
 
+from back.servicos import (
+    listar_servicos,
+    adicionar_servico,
+    editar_servico,
+    deletar_servico,
+    obter_servico
+)
+
 app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
@@ -77,6 +85,49 @@ def reativar(id_cliente):
     reativar_cliente(id_cliente)
 
     return redirect(url_for("clientes_inativos"))
+
+@app.route("/servicos", methods=["GET", "POST"])
+def servicos():
+    if request.method == "POST":
+        nome_servico = request.form.get("nome_servico")
+        preco_base = request.form.get("preco_base")
+
+        adicionar_servico(nome_servico, preco_base)
+
+        return redirect(url_for("servicos"))
+
+    servicos_df = listar_servicos()
+    servicos = servicos_df.to_dict(orient="records")
+
+    return render_template(
+        "servicos.html",
+        servicos=servicos
+    )
+
+@app.route("/servicos/editar/<int:id_servico>", methods=["GET", "POST"])
+def editar_servico_rota(id_servico):
+
+    if request.method == "POST":
+        nome_servico = request.form.get("nome_servico")
+        preco_base = request.form.get("preco_base")
+
+        editar_servico(id_servico, nome_servico, preco_base)
+
+        return redirect(url_for("servicos"))
+
+    servico = obter_servico(id_servico)
+
+    return render_template(
+        "editar_servico.html",
+        servico=servico
+    )
+
+@app.route("/servicos/excluir/<int:id_servico>", methods=["POST"])
+def excluir_servico(id_servico):
+
+    deletar_servico(id_servico)
+
+    return redirect(url_for("servicos"))
 
 if __name__ == "__main__":
     app.run(debug=True)

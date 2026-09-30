@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Serviços</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <h1>
+                Costura<br>
+                Inovadora
+            </h1>
+
+            <nav aria-label="Menu principal">
+                <a href="{{ url_for('inicio') }}">Clientes</a>
+                <a href="#">Pedidos</a>
+                <a href="{{ url_for('servicos') }}" class="active">Serviços</a>
+                <a href="#">Orçamentos</a>
+            </nav>
+
+        </aside>
+
+
+        <main class="content">
+
+            <header class="page-header">
+                <div>
+                    <h2>Serviços</h2>
+                    <p>Gerencie os serviços oferecidos pelo ateliê.</p>
+                </div>
+            </header>
+
+
+            <section class="panel">
+
+                <h3>Cadastrar Serviço</h3>
+
+                <form method="POST" action="{{ url_for('servicos') }}">
+
+                    <div class="form-group">
+                        <label for="nome_servico">
+                            Nome do serviço
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nome_servico"
+                            name="nome_servico"
+                            placeholder="Ex: Ajuste de barra"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="preco_base">
+                            Preço base
+                        </label>
+
+                        <input
+                            type="number"
+                            id="preco_base"
+                            name="preco_base"
+                            step="0.01"
+                            min="0"
+                            placeholder="Ex: 35.00"
+                            required
+                        >
+                    </div>
+
+
+                    <button type="submit">
+                        Cadastrar Serviço
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <section class="panel">
+
+                <h3>Serviços cadastrados</h3>
+
+                {% if servicos %}
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Serviço</th>
+                                <th>Preço base</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for servico in servicos %}
+
+                                <tr>
+                                    <td>
+                                        {{ servico.nome_servico }}
+                                    </td>
+
+                                    <td>
+                                        R$ {{ "%.2f"|format(servico.preco_base) }}
+                                    </td>
+
+                                    <td class="actions">
+
+                                        <a
+                                            href="{{ url_for('editar_servico_rota', id_servico=servico.id_servico) }}"
+                                            class="button-link"
+                                        >
+                                            Editar
+                                        </a>
+
+                                        <form
+                                            method="POST"
+                                            action="{{ url_for('excluir_servico', id_servico=servico.id_servico) }}"
+                                            class="inline-form"
+                                            onsubmit="return confirmarExclusao()"
+                                        >
+                                            <button type="submit" class="button-danger">
+                                                Excluir
+                                            </button>
+                                        </form>
+
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                {% else %}
+
+                    <p class="empty-message">
+                        Nenhum serviço cadastrado.
+                    </p>
+
+                {% endif %}
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>
