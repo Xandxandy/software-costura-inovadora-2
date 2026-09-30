@@ -26,6 +26,15 @@ from back.servicos import (
     obter_servico
 )
 
+from back.pedidos import (
+    listar_pedidos,
+    adicionar_pedido,
+    editar_pedido,
+    deletar_pedido,
+    obter_pedido,
+    listar_clientes_para_pedido
+)
+
 app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
@@ -128,6 +137,70 @@ def excluir_servico(id_servico):
     deletar_servico(id_servico)
 
     return redirect(url_for("servicos"))
+
+@app.route("/pedidos", methods=["GET", "POST"])
+def pedidos():
+
+    if request.method == "POST":
+        valor_total = request.form.get("valor_total")
+        data_pedido = request.form.get("data_pedido")
+        status = request.form.get("status")
+        id_cliente = request.form.get("id_cliente")
+        observacoes = request.form.get("observacoes")
+
+        adicionar_pedido(
+            valor_total,
+            data_pedido,
+            status,
+            id_cliente,
+            observacoes
+        )
+
+        return redirect(url_for("pedidos"))
+
+    pedidos_df = listar_pedidos()
+    pedidos_lista = pedidos_df.to_dict(orient="records")
+
+    clientes_df = listar_clientes_para_pedido()
+    clientes = clientes_df.to_dict(orient="records")
+
+    return render_template(
+        "pedidos.html",
+        pedidos=pedidos_lista,
+        clientes=clientes
+    )
+
+@app.route("/pedidos/editar/<int:id_pedido>", methods=["GET", "POST"])
+def editar_pedido_rota(id_pedido):
+
+    if request.method == "POST":
+        valor_total = request.form.get("valor_total")
+        data_pedido = request.form.get("data_pedido")
+        status = request.form.get("status")
+        id_cliente = request.form.get("id_cliente")
+        observacoes = request.form.get("observacoes")
+
+        editar_pedido(
+            id_pedido,
+            valor_total,
+            data_pedido,
+            status,
+            id_cliente,
+            observacoes
+        )
+
+        return redirect(url_for("pedidos"))
+
+    pedido = obter_pedido(id_pedido)
+
+    clientes_df = listar_clientes_para_pedido()
+    clientes = clientes_df.to_dict(orient="records")
+
+    return render_template(
+        "editar_pedido.html",
+        pedido=pedido,
+        clientes=clientes
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

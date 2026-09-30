@@ -136,7 +136,8 @@ def obter_pedido(id_pedido: int) -> dict:
                 "valor_total": row[1],
                 "data_pedido": row[2],
                 "status": row[3],
-                "id_cliente": row[4]
+                "id_cliente": row[4],
+                "observacoes": row[5]
             }
         return {}
     except sqlite3.Error as e:
