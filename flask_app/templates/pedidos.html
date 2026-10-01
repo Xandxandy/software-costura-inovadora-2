@@ -178,12 +178,25 @@
                                     <td>{{ pedido.observacoes or "-" }}</td>
 
                                     <td class="actions">
+
                                         <a
                                             href="{{ url_for('editar_pedido_rota', id_pedido=pedido.id_pedido) }}"
                                             class="button-link"
                                         >
                                             Editar
                                         </a>
+
+                                        <form
+                                            method="POST"
+                                            action="{{ url_for('excluir_pedido', id_pedido=pedido.id_pedido) }}"
+                                            class="inline-form"
+                                            onsubmit="return confirmarExclusao('pedido')"
+                                        >
+                                            <button type="submit" class="button-danger">
+                                                Excluir
+                                            </button>
+                                        </form>
+
                                     </td>
                                 </tr>
 
@@ -206,6 +219,8 @@
         </main>
 
     </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 

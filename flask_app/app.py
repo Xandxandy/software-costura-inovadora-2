@@ -202,5 +202,10 @@ def editar_pedido_rota(id_pedido):
         clientes=clientes
     )
 
+@app.route("/pedidos/excluir/<int:id_pedido>", methods=["POST"])
+def excluir_pedido(id_pedido):
+    deletar_pedido(id_pedido)
+    return redirect(url_for("pedidos"))
+
 if __name__ == "__main__":
     app.run(debug=True)

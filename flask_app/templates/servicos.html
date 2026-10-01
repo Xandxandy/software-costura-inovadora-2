@@ -133,7 +133,7 @@
                                             method="POST"
                                             action="{{ url_for('excluir_servico', id_servico=servico.id_servico) }}"
                                             class="inline-form"
-                                            onsubmit="return confirmarExclusao()"
+                                            onsubmit="return confirmarExclusao('serviço')"
                                         >
                                             <button type="submit" class="button-danger">
                                                 Excluir
