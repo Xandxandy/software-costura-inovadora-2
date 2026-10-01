@@ -1,227 +1,218 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Pedidos - Costura Inovadora{% endblock %}
 
-    <title>Pedidos - Costura Inovadora</title>
+{% block content %}
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
-</head>
+    <header class="page-header">
+        <div>
+            <h2>Pedidos</h2>
+            <p>Gerencie os pedidos do ateliê.</p>
+        </div>
+    </header>
 
-<body>
 
-    <div class="layout">
+    <!-- Cadastro de pedidos -->
+    <section class="panel">
 
-        <aside class="sidebar">
+        <h3>Cadastrar Pedido</h3>
 
-            <h1>
-                Costura<br>
-                Inovadora
-            </h1>
+        <form method="POST" action="{{ url_for('pedidos') }}">
 
-            <nav aria-label="Menu principal">
-                <a href="{{ url_for('inicio') }}">Clientes</a>
-                <a href="{{ url_for('pedidos') }}" class="active">Pedidos</a>
-                <a href="{{ url_for('servicos') }}">Serviços</a>
-                <a href="{{ url_for('orcamentos') }}">Orçamentos</a>
-            </nav>
+            <div class="form-group">
 
-        </aside>
+                <label for="id_cliente">Cliente</label>
 
+                <select
+                    id="id_cliente"
+                    name="id_cliente"
+                    required
+                >
 
-        <main class="content">
+                    <option value="">
+                        Selecione um cliente
+                    </option>
 
-            <header class="page-header">
-                <div>
-                    <h2>Pedidos</h2>
-                    <p>Gerencie os pedidos do ateliê.</p>
-                </div>
-            </header>
+                    {% for cliente in clientes %}
 
+                        <option value="{{ cliente.id_cliente }}">
+                            {{ cliente.nome }}
+                        </option>
 
-            <section class="panel">
+                    {% endfor %}
 
-                <h3>Cadastrar Pedido</h3>
+                </select>
 
-                <form method="POST" action="{{ url_for('pedidos') }}">
+            </div>
 
-                    <div class="form-group">
-                        <label for="id_cliente">Cliente</label>
 
-                        <select
-                            id="id_cliente"
-                            name="id_cliente"
-                            required
-                        >
-                            <option value="">
-                                Selecione um cliente
-                            </option>
+            <div class="form-group">
 
-                            {% for cliente in clientes %}
-                                <option value="{{ cliente.id_cliente }}">
-                                    {{ cliente.nome }}
-                                </option>
-                            {% endfor %}
+                <label for="valor_total">Valor total</label>
 
-                        </select>
-                    </div>
+                <input
+                    type="number"
+                    id="valor_total"
+                    name="valor_total"
+                    step="0.01"
+                    min="0"
+                    placeholder="Ex: 80.00"
+                    required
+                >
 
+            </div>
 
-                    <div class="form-group">
-                        <label for="valor_total">Valor total</label>
 
-                        <input
-                            type="number"
-                            id="valor_total"
-                            name="valor_total"
-                            step="0.01"
-                            min="0"
-                            placeholder="Ex: 80.00"
-                            required
-                        >
-                    </div>
+            <div class="form-group">
 
+                <label for="data_pedido">Data do pedido</label>
 
-                    <div class="form-group">
-                        <label for="data_pedido">Data do pedido</label>
+                <input
+                    type="date"
+                    id="data_pedido"
+                    name="data_pedido"
+                    required
+                >
 
-                        <input
-                            type="date"
-                            id="data_pedido"
-                            name="data_pedido"
-                            required
-                        >
-                    </div>
+            </div>
 
 
-                    <div class="form-group">
-                        <label for="status">Status</label>
+            <div class="form-group">
 
-                        <select
-                            id="status"
-                            name="status"
-                            required
-                        >
-                            <option value="">
-                                Selecione um status
-                            </option>
+                <label for="status">Status</label>
 
-                            <option value="Pendente">
-                                Pendente
-                            </option>
+                <select
+                    id="status"
+                    name="status"
+                    required
+                >
 
-                            <option value="Em andamento">
-                                Em andamento
-                            </option>
+                    <option value="">
+                        Selecione um status
+                    </option>
 
-                            <option value="Concluído">
-                                Concluído
-                            </option>
-                        </select>
-                    </div>
+                    <option value="Pendente">
+                        Pendente
+                    </option>
 
+                    <option value="Em andamento">
+                        Em andamento
+                    </option>
 
-                    <div class="form-group">
-                        <label for="observacoes">Observações</label>
+                    <option value="Concluído">
+                        Concluído
+                    </option>
 
-                        <textarea
-                            id="observacoes"
-                            name="observacoes"
-                            rows="4"
-                            placeholder="Informações adicionais sobre o pedido"
-                        ></textarea>
-                    </div>
+                </select>
 
+            </div>
 
-                    <button type="submit">
-                        Cadastrar Pedido
-                    </button>
 
-                </form>
+            <div class="form-group">
 
-            </section>
+                <label for="observacoes">Observações</label>
 
+                <textarea
+                    id="observacoes"
+                    name="observacoes"
+                    rows="4"
+                    placeholder="Informações adicionais sobre o pedido"
+                ></textarea>
 
-            <section class="panel">
+            </div>
 
-                <h3>Pedidos cadastrados</h3>
 
-                {% if pedidos %}
+            <button type="submit">
+                Cadastrar Pedido
+            </button>
 
-                    <table>
+        </form>
 
-                        <thead>
-                            <tr>
-                                <th>Cliente</th>
-                                <th>Data</th>
-                                <th>Valor</th>
-                                <th>Status</th>
-                                <th>Observações</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
+    </section>
 
-                        <tbody>
 
-                            {% for pedido in pedidos %}
+    <!-- Lista de pedidos -->
+    <section class="panel">
 
-                                <tr>
-                                    <td>{{ pedido.nome_cliente }}</td>
-                                    <td>{{ pedido.data_pedido }}</td>
-                                    <td>R$ {{ "%.2f"|format(pedido.valor_total) }}</td>
-                                    <td>{{ pedido.status }}</td>
-                                    <td>{{ pedido.observacoes or "-" }}</td>
+        <h3>Pedidos cadastrados</h3>
 
-                                    <td class="actions">
+        {% if pedidos %}
 
-                                        <a
-                                            href="{{ url_for('editar_pedido_rota', id_pedido=pedido.id_pedido) }}"
-                                            class="button-link"
-                                        >
-                                            Editar
-                                        </a>
+            <table>
 
-                                        <form
-                                            method="POST"
-                                            action="{{ url_for('excluir_pedido', id_pedido=pedido.id_pedido) }}"
-                                            class="inline-form"
-                                            onsubmit="return confirmarExclusao('pedido')"
-                                        >
-                                            <button type="submit" class="button-danger">
-                                                Excluir
-                                            </button>
-                                        </form>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Data</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Observações</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
 
-                                    </td>
-                                </tr>
 
-                            {% endfor %}
+                <tbody>
 
-                        </tbody>
+                    {% for pedido in pedidos %}
 
-                    </table>
+                        <tr>
 
-                {% else %}
+                            <td>{{ pedido.nome_cliente }}</td>
 
-                    <p class="empty-message">
-                        Nenhum pedido cadastrado.
-                    </p>
+                            <td>{{ pedido.data_pedido }}</td>
 
-                {% endif %}
+                            <td>
+                                R$ {{ "%.2f"|format(pedido.valor_total) }}
+                            </td>
 
-            </section>
+                            <td>{{ pedido.status }}</td>
 
-        </main>
+                            <td>{{ pedido.observacoes or "-" }}</td>
 
-    </div>
+                            <td class="actions">
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+                                <a
+                                    href="{{ url_for('editar_pedido_rota', id_pedido=pedido.id_pedido) }}"
+                                    class="button-link"
+                                >
+                                    Editar
+                                </a>
 
-</body>
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('excluir_pedido', id_pedido=pedido.id_pedido) }}"
+                                    class="inline-form"
+                                    onsubmit="return confirmarExclusao('pedido')"
+                                >
 
-</html>
+                                    <button
+                                        type="submit"
+                                        class="button-danger"
+                                    >
+                                        Excluir
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        {% else %}
+
+            <p class="empty-message">
+                Nenhum pedido cadastrado.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+{% endblock %}

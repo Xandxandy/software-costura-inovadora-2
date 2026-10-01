@@ -1,179 +1,192 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orçamentos - Costura Inovadora</title>
+{% block title %}Orçamentos - Costura Inovadora{% endblock %}
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
-</head>
+{% block content %}
 
-<body>
-    <div class="layout">
+    <header class="page-header">
+        <h2>Orçamentos</h2>
+        <p>Cadastre e acompanhe os orçamentos do ateliê.</p>
+    </header>
 
-        <aside class="sidebar">
-            <h1>Costura<br>Inovadora</h1>
 
-            <nav aria-label="Menu principal">
-                <a href="{{ url_for('inicio') }}">Clientes</a>
-                <a href="{{ url_for('pedidos') }}">Pedidos</a>
-                <a href="{{ url_for('servicos') }}">Serviços</a>
-                <a href="{{ url_for('orcamentos') }}" class="active">
-                    Orçamentos
-                </a>
-            </nav>
-        </aside>
+    <!-- Cadastro de orçamentos -->
+    <section class="panel">
 
-        <main class="content">
+        <h3>Novo orçamento</h3>
 
-            <header class="page-header">
-                <h2>Orçamentos</h2>
-                <p>Cadastre e acompanhe os orçamentos do ateliê.</p>
-            </header>
+        <form method="POST" action="{{ url_for('orcamentos') }}">
 
-            <section class="panel">
-                <h3>Novo orçamento</h3>
+            <div class="form-group">
 
-                <form method="POST" action="{{ url_for('orcamentos') }}">
+                <label for="id_cliente">Cliente</label>
 
-                    <div class="form-group">
-                        <label for="id_cliente">Cliente</label>
+                <select
+                    id="id_cliente"
+                    name="id_cliente"
+                    required
+                >
 
-                        <select
-                            id="id_cliente"
-                            name="id_cliente"
-                            required
-                        >
-                            <option value="">Selecione um cliente</option>
+                    <option value="">Selecione um cliente</option>
 
-                            {% for cliente in clientes %}
-                                <option value="{{ cliente.id_cliente }}">
-                                    {{ cliente.nome }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                    {% for cliente in clientes %}
 
-                    <div class="form-group">
-                        <label for="valor_total">Valor estimado</label>
+                        <option value="{{ cliente.id_cliente }}">
+                            {{ cliente.nome }}
+                        </option>
 
-                        <input
-                            type="number"
-                            id="valor_total"
-                            name="valor_total"
-                            step="0.01"
-                            min="0"
-                            placeholder="Ex: 80.00"
-                            required
-                        >
-                    </div>
+                    {% endfor %}
 
-                    <div class="form-group">
-                        <label for="data_pedido">Data</label>
+                </select>
 
-                        <input
-                            type="date"
-                            id="data_pedido"
-                            name="data_pedido"
-                            required
-                        >
-                    </div>
+            </div>
 
-                    <div class="form-group">
-                        <label for="observacoes">Observações</label>
 
-                        <textarea
-                            id="observacoes"
-                            name="observacoes"
-                            rows="4"
-                            placeholder="Descreva os serviços solicitados"
-                        ></textarea>
-                    </div>
+            <div class="form-group">
 
-                    <button type="submit">Cadastrar orçamento</button>
-                </form>
-            </section>
+                <label for="valor_total">Valor estimado</label>
 
-            <section class="panel">
-                <h3>Orçamentos cadastrados</h3>
+                <input
+                    type="number"
+                    id="valor_total"
+                    name="valor_total"
+                    step="0.01"
+                    min="0"
+                    placeholder="Ex: 80.00"
+                    required
+                >
 
-                {% if orcamentos %}
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Cliente</th>
-                                <th>Data</th>
-                                <th>Valor estimado</th>
-                                <th>Observações</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
+            </div>
 
-                        <tbody>
-                            {% for orcamento in orcamentos %}
-                                <tr>
-                                    <td>{{ orcamento.nome_cliente }}</td>
-                                    <td>{{ orcamento.data_pedido }}</td>
-                                    <td>
-                                        R$ {{ "%.2f"|format(orcamento.valor_total) }}
-                                    </td>
 
-                                    <td>{{ orcamento.observacoes or "-" }}</td>
-                                    
-                                    
-                                    <td class="actions">
+            <div class="form-group">
 
-                                        <a
-                                            href="{{ url_for('editar_orcamento_rota', id_pedido=orcamento.id_pedido) }}"
-                                            class="button-link"
-                                        >
-                                            Editar
-                                        </a>
+                <label for="data_pedido">Data</label>
 
-                                        <form
-                                            method="POST"
-                                            action="{{ url_for('confirmar_orcamento_rota', id_pedido=orcamento.id_pedido) }}"
-                                            class="inline-form"
-                                        >
-                                            <button type="submit">
-                                                Confirmar
-                                            </button>
-                                        </form>
+                <input
+                    type="date"
+                    id="data_pedido"
+                    name="data_pedido"
+                    required
+                >
 
-                                        <form
-                                            method="POST"
-                                            action="{{ url_for('excluir_orcamento', id_pedido=orcamento.id_pedido) }}"
-                                            class="inline-form"
-                                            onsubmit="return confirmarExclusao('orçamento')"
-                                        >
-                                            <button type="submit" class="button-danger">
-                                                Excluir
-                                            </button>
-                                        </form>
+            </div>
 
-                                    </td>
 
-                                </tr>
+            <div class="form-group">
 
-                            {% endfor %}
+                <label for="observacoes">Observações</label>
 
-                        </tbody>
-                    </table>
-                {% else %}
-                    <p class="empty-message">
-                        Nenhum orçamento cadastrado.
-                    </p>
-                {% endif %}
-            </section>
+                <textarea
+                    id="observacoes"
+                    name="observacoes"
+                    rows="4"
+                    placeholder="Descreva os serviços solicitados"
+                ></textarea>
 
-        </main>
-    </div>
+            </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
-</body>
-</html>
+            <button type="submit">
+                Cadastrar orçamento
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- Lista de orçamentos -->
+    <section class="panel">
+
+        <h3>Orçamentos cadastrados</h3>
+
+        {% if orcamentos %}
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Data</th>
+                        <th>Valor estimado</th>
+                        <th>Observações</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    {% for orcamento in orcamentos %}
+
+                        <tr>
+
+                            <td>{{ orcamento.nome_cliente }}</td>
+
+                            <td>{{ orcamento.data_pedido }}</td>
+
+                            <td>
+                                R$ {{ "%.2f"|format(orcamento.valor_total) }}
+                            </td>
+
+                            <td>{{ orcamento.observacoes or "-" }}</td>
+
+                            <td class="actions">
+
+                                <a
+                                    href="{{ url_for('editar_orcamento_rota', id_pedido=orcamento.id_pedido) }}"
+                                    class="button-link"
+                                >
+                                    Editar
+                                </a>
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('confirmar_orcamento_rota', id_pedido=orcamento.id_pedido) }}"
+                                    class="inline-form"
+                                >
+
+                                    <button type="submit">
+                                        Confirmar
+                                    </button>
+
+                                </form>
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('excluir_orcamento', id_pedido=orcamento.id_pedido) }}"
+                                    class="inline-form"
+                                    onsubmit="return confirmarExclusao('orçamento')"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="button-danger"
+                                    >
+                                        Excluir
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        {% else %}
+
+            <p class="empty-message">
+                Nenhum orçamento cadastrado.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+{% endblock %}

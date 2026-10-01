@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}Costura Inovadora{% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <h1>Costura<br>Inovadora</h1>
+
+            <nav aria-label="Menu principal">
+
+                <a
+                    href="{{ url_for('inicio') }}"
+                    class="{% if request.endpoint in ['inicio', 'editar', 'clientes_inativos'] %}active{% endif %}"
+                >
+                    Clientes
+                </a>
+
+                <a
+                    href="{{ url_for('pedidos') }}"
+                    class="{% if request.endpoint in ['pedidos', 'editar_pedido_rota'] %}active{% endif %}"
+                >
+                    Pedidos
+                </a>
+
+                <a
+                    href="{{ url_for('servicos') }}"
+                    class="{% if request.endpoint in ['servicos', 'editar_servico_rota'] %}active{% endif %}"
+                >
+                    Serviços
+                </a>
+
+                <a
+                    href="{{ url_for('orcamentos') }}"
+                    class="{% if request.endpoint in ['orcamentos', 'editar_orcamento_rota'] %}active{% endif %}"
+                >
+                    Orçamentos
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <main class="content">
+
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>

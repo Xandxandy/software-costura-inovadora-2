@@ -1,159 +1,156 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Clientes - Costura Inovadora{% endblock %}
 
-    <title>Costura Inovadora</title>
+{% block content %}
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
-</head>
-
-<body>
-
-    <div class="layout">
-
-        <!-- Menu lateral -->
-        <aside class="sidebar">
-
-            <h1>
-                Costura<br>
-                Inovadora
-            </h1>
-
-            <nav aria-label="Menu principal">
-                <a href="/" class="active">Clientes</a>
-                <a href="{{ url_for('pedidos') }}">Pedidos</a>
-                <a href="{{ url_for('servicos') }}">Serviços</a>
-                <a href="{{ url_for('orcamentos') }}">Orçamentos</a>
-            </nav>
-
-        </aside>
+    <header class="page-header">
+        <div>
+            <h2>Clientes</h2>
+            <p>Gerencie os clientes.</p>
+        </div>
+    </header>
 
 
-        <!-- Conteúdo principal -->
-        <main class="content">
+    <!-- Cadastro de clientes -->
+    <section class="panel" aria-labelledby="form-title">
 
-            <header class="page-header">
-                <div>
-                    <h2>Clientes</h2>
-                    <p>Gerencie os clientes.</p>
-                </div>
-            </header>
+        <h3 id="form-title">Cadastrar Cliente</h3>
 
+        <form method="POST" action="{{ url_for('inicio') }}">
 
-            <!-- Cadastro de clientes -->
-            <section class="panel" aria-labelledby="form-title">
+            <div class="form-group">
 
-                <h3 id="form-title">Cadastrar Cliente</h3>
+                <label for="nome">Nome completo</label>
 
-                <form method="POST" action="{{ url_for('inicio') }}">
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Digite o nome do cliente"
+                    required
+                >
 
-                    <div class="form-group">
-                        <label for="nome">Nome completo</label>
-
-                        <input
-                            type="text"
-                            id="nome"
-                            name="nome"
-                            placeholder="Digite o nome do cliente"
-                            required
-                        >
-                    </div>
+            </div>
 
 
-                    <div class="form-group">
-                        <label for="telefone">Telefone</label>
+            <div class="form-group">
 
-                        <input
-                            type="tel"
-                            id="telefone"
-                            name="telefone"
-                            placeholder="Digite o telefone do cliente"
-                            required
-                        >
-                    </div>
+                <label for="telefone">Telefone</label>
 
+                <input
+                    type="tel"
+                    id="telefone"
+                    name="telefone"
+                    placeholder="Digite o telefone do cliente"
+                    required
+                >
 
-                    <div class="form-group">
-                        <label for="email">Email</label>
-
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="Digite o email do cliente"
-                            required
-                        >
-                    </div>
-
-                    <button type="submit">Cadastrar Cliente</button>
-
-                </form>
-
-            </section>
+            </div>
 
 
-            <!-- Lista de clientes -->
-            <section class="panel" aria-labelledby="list-title">
+            <div class="form-group">
 
-                <h3 id="list-title">Clientes cadastrados</h3>
+                <label for="email">Email</label>
 
-                <a href="{{ url_for('clientes_inativos') }}" class="button-link">Ver Clientes Inativos</a>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Digite o email do cliente"
+                    required
+                >
 
-                {% if clientes %}
+            </div>
 
-                    <table>
+            <button type="submit">Cadastrar Cliente</button>
 
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Telefone</th>
-                                <th>Email</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
+        </form>
+
+    </section>
 
 
-                        <tbody>
+    <!-- Lista de clientes -->
+    <section class="panel" aria-labelledby="list-title">
 
-                            {% for cliente in clientes %}
+        <h3 id="list-title">Clientes cadastrados</h3>
 
-                                <tr>
-                                    <td>{{ cliente.nome }}</td>
-                                    <td>{{ cliente.telefone }}</td>
-                                    <td>{{ cliente.email }}</td>
-                                    
-                                    <td class="actions">
-                                        <a href="{{ url_for('editar', id_cliente=cliente.id_cliente) }}"
-                                        class="button-link">Editar</a>
+        <a
+            href="{{ url_for('clientes_inativos') }}"
+            class="button-link"
+        >
+            Ver Clientes Inativos
+        </a>
 
-                                        <form method="POST" action="{{ url_for('inativar', id_cliente=cliente.id_cliente) }}"
-                                        class="inline-form">
-                                            <button type="submit" class="button-danger">Inativar</button>
-                                        </form>
-                                    </td>
-                                </tr>
 
-                            {% endfor %}
+        {% if clientes %}
 
-                        </tbody>
-                    </table>
+            <table>
 
-                {% else %}
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
 
-                    <p class="empty-message">
-                        Nenhum cliente cadastrado.
-                    </p>
 
-                {% endif %}
+                <tbody>
 
-            </section>
-        </main>
-    </div>
-</body>
-</html>
+                    {% for cliente in clientes %}
+
+                        <tr>
+
+                            <td>{{ cliente.nome }}</td>
+
+                            <td>{{ cliente.telefone }}</td>
+
+                            <td>{{ cliente.email }}</td>
+
+                            <td class="actions">
+
+                                <a
+                                    href="{{ url_for('editar', id_cliente=cliente.id_cliente) }}"
+                                    class="button-link"
+                                >
+                                    Editar
+                                </a>
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('inativar', id_cliente=cliente.id_cliente) }}"
+                                    class="inline-form"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="button-danger"
+                                    >
+                                        Inativar
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        {% else %}
+
+            <p class="empty-message">
+                Nenhum cliente cadastrado.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+{% endblock %}

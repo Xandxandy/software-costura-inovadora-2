@@ -1,122 +1,105 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% block title %}Editar Orçamento - Costura Inovadora{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block content %}
 
-    <title>Editar Orçamento</title>
+    <header class="page-header">
+        <h2>Editar Orçamento</h2>
+        <p>Altere os dados antes de confirmar o orçamento.</p>
+    </header>
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
-</head>
 
-<body>
+    <section class="panel">
 
-    <div class="layout">
+        <form method="POST">
 
-        <aside class="sidebar">
-            <h1>Costura<br>Inovadora</h1>
+            <div class="form-group">
 
-            <nav aria-label="Menu principal">
-                <a href="{{ url_for('inicio') }}">Clientes</a>
-                <a href="{{ url_for('pedidos') }}">Pedidos</a>
-                <a href="{{ url_for('servicos') }}">Serviços</a>
-                <a href="{{ url_for('orcamentos') }}" class="active">
-                    Orçamentos
-                </a>
-            </nav>
-        </aside>
+                <label for="id_cliente">Cliente</label>
 
-        <main class="content">
+                <select
+                    id="id_cliente"
+                    name="id_cliente"
+                    required
+                >
 
-            <header class="page-header">
-                <h2>Editar Orçamento</h2>
-                <p>Altere os dados antes de confirmar o orçamento.</p>
-            </header>
+                    {% for cliente in clientes %}
 
-            <section class="panel">
-
-                <form method="POST">
-
-                    <div class="form-group">
-                        <label for="id_cliente">Cliente</label>
-
-                        <select
-                            id="id_cliente"
-                            name="id_cliente"
-                            required
+                        <option
+                            value="{{ cliente.id_cliente }}"
+                            {% if cliente.id_cliente == orcamento.id_cliente %}
+                                selected
+                            {% endif %}
                         >
-                            {% for cliente in clientes %}
-                                <option
-                                    value="{{ cliente.id_cliente }}"
-                                    {% if cliente.id_cliente == orcamento.id_cliente %}
-                                        selected
-                                    {% endif %}
-                                >
-                                    {{ cliente.nome }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                            {{ cliente.nome }}
+                        </option>
 
-                    <div class="form-group">
-                        <label for="valor_total">Valor estimado</label>
+                    {% endfor %}
 
-                        <input
-                            type="number"
-                            id="valor_total"
-                            name="valor_total"
-                            value="{{ orcamento.valor_total }}"
-                            step="0.01"
-                            min="0"
-                            required
-                        >
-                    </div>
+                </select>
 
-                    <div class="form-group">
-                        <label for="data_pedido">Data</label>
+            </div>
 
-                        <input
-                            type="date"
-                            id="data_pedido"
-                            name="data_pedido"
-                            value="{{ orcamento.data_pedido }}"
-                            required
-                        >
-                    </div>
 
-                    <div class="form-group">
-                        <label for="observacoes">Observações</label>
+            <div class="form-group">
 
-                        <textarea
-                            id="observacoes"
-                            name="observacoes"
-                            rows="4"
-                        >{{ orcamento.observacoes or "" }}</textarea>
-                    </div>
+                <label for="valor_total">Valor estimado</label>
 
-                    <button type="submit">
-                        Salvar alterações
-                    </button>
+                <input
+                    type="number"
+                    id="valor_total"
+                    name="valor_total"
+                    value="{{ orcamento.valor_total }}"
+                    step="0.01"
+                    min="0"
+                    required
+                >
 
-                    <a
-                        href="{{ url_for('orcamentos') }}"
-                        class="button-link"
-                    >
-                        Cancelar
-                    </a>
+            </div>
 
-                </form>
 
-            </section>
+            <div class="form-group">
 
-        </main>
+                <label for="data_pedido">Data</label>
 
-    </div>
+                <input
+                    type="date"
+                    id="data_pedido"
+                    name="data_pedido"
+                    value="{{ orcamento.data_pedido }}"
+                    required
+                >
 
-</body>
-</html>
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="observacoes">Observações</label>
+
+                <textarea
+                    id="observacoes"
+                    name="observacoes"
+                    rows="4"
+                >{{ orcamento.observacoes or "" }}</textarea>
+
+            </div>
+
+
+            <button type="submit">
+                Salvar alterações
+            </button>
+
+            <a
+                href="{{ url_for('orcamentos') }}"
+                class="button-link"
+            >
+                Cancelar
+            </a>
+
+        </form>
+
+    </section>
+
+{% endblock %}

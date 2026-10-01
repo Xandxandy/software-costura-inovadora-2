@@ -1,170 +1,138 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Serviços - Costura Inovadora{% endblock %}
 
-    <title>Serviços</title>
+{% block content %}
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
-</head>
+    <header class="page-header">
+        <h2>Serviços</h2>
+        <p>Cadastre e gerencie os serviços do ateliê.</p>
+    </header>
 
-<body>
+    <section class="panel">
 
-    <div class="layout">
+        <h3>Cadastrar Serviço</h3>
 
-        <aside class="sidebar">
+        <form
+            method="POST"
+            action="{{ url_for('servicos') }}"
+        >
 
-            <h1>
-                Costura<br>
-                Inovadora
-            </h1>
+            <div class="form-group">
 
-            <nav aria-label="Menu principal">
-                <a href="{{ url_for('inicio') }}">Clientes</a>
-                <a href="{{ url_for('pedidos') }}">Pedidos</a>
-                <a href="{{ url_for('servicos') }}" class="active">Serviços</a>
-                <a href="{{ url_for('orcamentos') }}">Orçamentos</a>
-            </nav>
+                <label for="nome_servico">
+                    Nome do serviço
+                </label>
 
-        </aside>
+                <input
+                    type="text"
+                    id="nome_servico"
+                    name="nome_servico"
+                    placeholder="Ex: Ajuste de barra"
+                    required
+                >
 
+            </div>
 
-        <main class="content">
+            <div class="form-group">
 
-            <header class="page-header">
-                <div>
-                    <h2>Serviços</h2>
-                    <p>Gerencie os serviços oferecidos pelo ateliê.</p>
-                </div>
-            </header>
+                <label for="preco_base">
+                    Preço base
+                </label>
 
+                <input
+                    type="number"
+                    id="preco_base"
+                    name="preco_base"
+                    step="0.01"
+                    min="0"
+                    placeholder="Ex: 35.00"
+                    required
+                >
 
-            <section class="panel">
+            </div>
 
-                <h3>Cadastrar Serviço</h3>
+            <button type="submit">
+                Cadastrar Serviço
+            </button>
 
-                <form method="POST" action="{{ url_for('servicos') }}">
+        </form>
 
-                    <div class="form-group">
-                        <label for="nome_servico">
-                            Nome do serviço
-                        </label>
+    </section>
 
-                        <input
-                            type="text"
-                            id="nome_servico"
-                            name="nome_servico"
-                            placeholder="Ex: Ajuste de barra"
-                            required
-                        >
-                    </div>
+    <section class="panel">
 
+        <h3>Serviços cadastrados</h3>
 
-                    <div class="form-group">
-                        <label for="preco_base">
-                            Preço base
-                        </label>
+        {% if servicos %}
 
-                        <input
-                            type="number"
-                            id="preco_base"
-                            name="preco_base"
-                            step="0.01"
-                            min="0"
-                            placeholder="Ex: 35.00"
-                            required
-                        >
-                    </div>
+            <table>
 
+                <thead>
+                    <tr>
+                        <th>Serviço</th>
+                        <th>Preço base</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
 
-                    <button type="submit">
-                        Cadastrar Serviço
-                    </button>
+                <tbody>
 
-                </form>
+                    {% for servico in servicos %}
 
-            </section>
+                        <tr>
 
+                            <td>
+                                {{ servico.nome_servico }}
+                            </td>
 
-            <section class="panel">
+                            <td>
+                                R$ {{ "%.2f"|format(servico.preco_base) }}
+                            </td>
 
-                <h3>Serviços cadastrados</h3>
+                            <td class="actions">
 
-                {% if servicos %}
+                                <a
+                                    href="{{ url_for('editar_servico_rota', id_servico=servico.id_servico) }}"
+                                    class="button-link"
+                                >
+                                    Editar
+                                </a>
 
-                    <table>
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('excluir_servico', id_servico=servico.id_servico) }}"
+                                    class="inline-form"
+                                    onsubmit="return confirmarExclusao('serviço')"
+                                >
 
-                        <thead>
-                            <tr>
-                                <th>Serviço</th>
-                                <th>Preço base</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
+                                    <button
+                                        type="submit"
+                                        class="button-danger"
+                                    >
+                                        Excluir
+                                    </button>
 
-                        <tbody>
+                                </form>
 
-                            {% for servico in servicos %}
+                            </td>
 
-                                <tr>
-                                    <td>
-                                        {{ servico.nome_servico }}
-                                    </td>
+                        </tr>
 
-                                    <td>
-                                        R$ {{ "%.2f"|format(servico.preco_base) }}
-                                    </td>
+                    {% endfor %}
 
-                                    <td class="actions">
+                </tbody>
 
-                                        <a
-                                            href="{{ url_for('editar_servico_rota', id_servico=servico.id_servico) }}"
-                                            class="button-link"
-                                        >
-                                            Editar
-                                        </a>
+            </table>
 
-                                        <form
-                                            method="POST"
-                                            action="{{ url_for('excluir_servico', id_servico=servico.id_servico) }}"
-                                            class="inline-form"
-                                            onsubmit="return confirmarExclusao('serviço')"
-                                        >
-                                            <button type="submit" class="button-danger">
-                                                Excluir
-                                            </button>
-                                        </form>
+        {% else %}
 
-                                    </td>
-                                </tr>
+            <p class="empty-message">
+                Nenhum serviço cadastrado.
+            </p>
 
-                            {% endfor %}
+        {% endif %}
 
-                        </tbody>
+    </section>
 
-                    </table>
-
-                {% else %}
-
-                    <p class="empty-message">
-                        Nenhum serviço cadastrado.
-                    </p>
-
-                {% endif %}
-
-            </section>
-
-        </main>
-
-    </div>
-
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-
-</body>
-
-</html>
+{% endblock %}

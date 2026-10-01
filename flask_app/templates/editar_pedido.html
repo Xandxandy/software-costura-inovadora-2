@@ -1,169 +1,149 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Editar Pedido - Costura Inovadora{% endblock %}
 
-    <title>Editar Pedido - Costura Inovadora</title>
+{% block content %}
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
-</head>
-
-<body>
-
-    <div class="layout">
-
-        <aside class="sidebar">
-
-            <h1>
-                Costura<br>
-                Inovadora
-            </h1>
-
-            <nav aria-label="Menu principal">
-                <a href="{{ url_for('inicio') }}">Clientes</a>
-                <a href="{{ url_for('pedidos') }}" class="active">Pedidos</a>
-                <a href="{{ url_for('servicos') }}">Serviços</a>
-                <a href="{{ url_for('orcamentos') }}">Orçamentos</a>
-            </nav>
-
-        </aside>
+    <header class="page-header">
+        <div>
+            <h2>Editar Pedido</h2>
+            <p>Altere os dados do pedido selecionado.</p>
+        </div>
+    </header>
 
 
-        <main class="content">
+    <section class="panel">
 
-            <header class="page-header">
-                <div>
-                    <h2>Editar Pedido</h2>
-                    <p>Altere os dados do pedido selecionado.</p>
-                </div>
-            </header>
+        <form method="POST">
 
+            <div class="form-group">
 
-            <section class="panel">
+                <label for="id_cliente">Cliente</label>
 
-                <form method="POST">
+                <select
+                    id="id_cliente"
+                    name="id_cliente"
+                    required
+                >
 
-                    <div class="form-group">
-                        <label for="id_cliente">Cliente</label>
+                    {% for cliente in clientes %}
 
-                        <select
-                            id="id_cliente"
-                            name="id_cliente"
-                            required
+                        <option
+                            value="{{ cliente.id_cliente }}"
+                            {% if cliente.id_cliente == pedido.id_cliente %}
+                                selected
+                            {% endif %}
                         >
+                            {{ cliente.nome }}
+                        </option>
 
-                            {% for cliente in clientes %}
+                    {% endfor %}
 
-                                <option
-                                    value="{{ cliente.id_cliente }}"
-                                    {% if cliente.id_cliente == pedido.id_cliente %}
-                                        selected
-                                    {% endif %}
-                                >
-                                    {{ cliente.nome }}
-                                </option>
+                </select>
 
-                            {% endfor %}
-
-                        </select>
-                    </div>
+            </div>
 
 
-                    <div class="form-group">
-                        <label for="valor_total">Valor total</label>
+            <div class="form-group">
 
-                        <input
-                            type="number"
-                            id="valor_total"
-                            name="valor_total"
-                            value="{{ pedido.valor_total }}"
-                            step="0.01"
-                            min="0"
-                            required
-                        >
-                    </div>
+                <label for="valor_total">Valor total</label>
 
+                <input
+                    type="number"
+                    id="valor_total"
+                    name="valor_total"
+                    value="{{ pedido.valor_total }}"
+                    step="0.01"
+                    min="0"
+                    required
+                >
 
-                    <div class="form-group">
-                        <label for="data_pedido">Data do pedido</label>
-
-                        <input
-                            type="date"
-                            id="data_pedido"
-                            name="data_pedido"
-                            value="{{ pedido.data_pedido }}"
-                            required
-                        >
-                    </div>
+            </div>
 
 
-                    <div class="form-group">
-                        <label for="status">Status</label>
+            <div class="form-group">
 
-                        <select
-                            id="status"
-                            name="status"
-                            required
-                        >
-                            <option
-                                value="Pendente"
-                                {% if pedido.status == "Pendente" %}selected{% endif %}
-                            >
-                                Pendente
-                            </option>
+                <label for="data_pedido">Data do pedido</label>
 
-                            <option
-                                value="Em andamento"
-                                {% if pedido.status == "Em andamento" %}selected{% endif %}
-                            >
-                                Em andamento
-                            </option>
+                <input
+                    type="date"
+                    id="data_pedido"
+                    name="data_pedido"
+                    value="{{ pedido.data_pedido }}"
+                    required
+                >
 
-                            <option
-                                value="Concluído"
-                                {% if pedido.status == "Concluído" %}selected{% endif %}
-                            >
-                                Concluído
-                            </option>
-                        </select>
-                    </div>
+            </div>
 
 
-                    <div class="form-group">
-                        <label for="observacoes">Observações</label>
+            <div class="form-group">
 
-                        <textarea
-                            id="observacoes"
-                            name="observacoes"
-                            rows="4"
-                        >{{ pedido.observacoes or "" }}</textarea>
-                    </div>
+                <label for="status">Status</label>
 
+                <select
+                    id="status"
+                    name="status"
+                    required
+                >
 
-                    <button type="submit">
-                        Salvar alterações
-                    </button>
-
-                    <a
-                        href="{{ url_for('pedidos') }}"
-                        class="button-link"
+                    <option
+                        value="Pendente"
+                        {% if pedido.status == "Pendente" %}
+                            selected
+                        {% endif %}
                     >
-                        Cancelar
-                    </a>
+                        Pendente
+                    </option>
 
-                </form>
+                    <option
+                        value="Em andamento"
+                        {% if pedido.status == "Em andamento" %}
+                            selected
+                        {% endif %}
+                    >
+                        Em andamento
+                    </option>
 
-            </section>
+                    <option
+                        value="Concluído"
+                        {% if pedido.status == "Concluído" %}
+                            selected
+                        {% endif %}
+                    >
+                        Concluído
+                    </option>
 
-        </main>
+                </select>
 
-    </div>
+            </div>
 
-</body>
 
-</html>
+            <div class="form-group">
+
+                <label for="observacoes">Observações</label>
+
+                <textarea
+                    id="observacoes"
+                    name="observacoes"
+                    rows="4"
+                >{{ pedido.observacoes or "" }}</textarea>
+
+            </div>
+
+
+            <button type="submit">
+                Salvar alterações
+            </button>
+
+            <a
+                href="{{ url_for('pedidos') }}"
+                class="button-link"
+            >
+                Cancelar
+            </a>
+
+        </form>
+
+    </section>
+
+{% endblock %}

@@ -1,108 +1,70 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Editar Serviço - Costura Inovadora{% endblock %}
 
-    <title>Editar Serviço</title>
+{% block content %}
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
-</head>
-
-<body>
-
-    <div class="layout">
-
-        <aside class="sidebar">
-
-            <h1>
-                Costura<br>
-                Inovadora
-            </h1>
-
-            <nav aria-label="Menu principal">
-                <a href="{{ url_for('inicio') }}">Clientes</a>
-                <a href="{{ url_for('pedidos') }}">Pedidos</a>
-                <a href="{{ url_for('servicos') }}" class="active">Serviços</a>
-                <a href="{{ url_for('orcamentos') }}">Orçamentos</a>
-            </nav>
-
-        </aside>
+    <header class="page-header">
+        <div>
+            <h2>Editar Serviço</h2>
+            <p>Altere as informações do serviço.</p>
+        </div>
+    </header>
 
 
-        <main class="content">
+    <section class="panel">
 
-            <header class="page-header">
-                <div>
-                    <h2>Editar Serviço</h2>
-                    <p>Altere as informações do serviço.</p>
-                </div>
-            </header>
+        <form method="POST">
 
+            <div class="form-group">
 
-            <section class="panel">
+                <label for="nome_servico">
+                    Nome do serviço
+                </label>
 
-                <form method="POST">
+                <input
+                    type="text"
+                    id="nome_servico"
+                    name="nome_servico"
+                    value="{{ servico.nome_servico }}"
+                    required
+                >
 
-                    <div class="form-group">
-
-                        <label for="nome_servico">
-                            Nome do serviço
-                        </label>
-
-                        <input
-                            type="text"
-                            id="nome_servico"
-                            name="nome_servico"
-                            value="{{ servico.nome_servico }}"
-                            required
-                        >
-
-                    </div>
+            </div>
 
 
-                    <div class="form-group">
+            <div class="form-group">
 
-                        <label for="preco_base">
-                            Preço base
-                        </label>
+                <label for="preco_base">
+                    Preço base
+                </label>
 
-                        <input
-                            type="number"
-                            id="preco_base"
-                            name="preco_base"
-                            value="{{ servico.preco_base }}"
-                            step="0.01"
-                            min="0"
-                            required
-                        >
+                <input
+                    type="number"
+                    id="preco_base"
+                    name="preco_base"
+                    value="{{ servico.preco_base }}"
+                    step="0.01"
+                    min="0"
+                    required
+                >
 
-                    </div>
+            </div>
 
 
-                    <button type="submit">
-                        Salvar alterações
-                    </button>
+            <button type="submit">
+                Salvar alterações
+            </button>
 
-                    <a
-                        href="{{ url_for('servicos') }}"
-                        class="button-link"
-                    >
-                        Cancelar
-                    </a>
+            <a
+                href="{{ url_for('servicos') }}"
+                class="button-link"
+            >
+                Cancelar
+            </a>
 
-                </form>
+        </form>
 
-            </section>
+    </section>
 
-        </main>
-
-    </div>
-
-</body>
-
-</html>
+{% endblock %}
