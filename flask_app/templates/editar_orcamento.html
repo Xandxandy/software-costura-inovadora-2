@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -5,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Editar Pedido - Costura Inovadora</title>
+    <title>Editar Orçamento</title>
 
     <link
         rel="stylesheet"
@@ -18,31 +19,24 @@
     <div class="layout">
 
         <aside class="sidebar">
-
-            <h1>
-                Costura<br>
-                Inovadora
-            </h1>
+            <h1>Costura<br>Inovadora</h1>
 
             <nav aria-label="Menu principal">
                 <a href="{{ url_for('inicio') }}">Clientes</a>
-                <a href="{{ url_for('pedidos') }}" class="active">Pedidos</a>
+                <a href="{{ url_for('pedidos') }}">Pedidos</a>
                 <a href="{{ url_for('servicos') }}">Serviços</a>
-                <a href="{{ url_for('orcamentos') }}">Orçamentos</a>
+                <a href="{{ url_for('orcamentos') }}" class="active">
+                    Orçamentos
+                </a>
             </nav>
-
         </aside>
-
 
         <main class="content">
 
             <header class="page-header">
-                <div>
-                    <h2>Editar Pedido</h2>
-                    <p>Altere os dados do pedido selecionado.</p>
-                </div>
+                <h2>Editar Orçamento</h2>
+                <p>Altere os dados antes de confirmar o orçamento.</p>
             </header>
-
 
             <section class="panel">
 
@@ -56,83 +50,44 @@
                             name="id_cliente"
                             required
                         >
-
                             {% for cliente in clientes %}
-
                                 <option
                                     value="{{ cliente.id_cliente }}"
-                                    {% if cliente.id_cliente == pedido.id_cliente %}
+                                    {% if cliente.id_cliente == orcamento.id_cliente %}
                                         selected
                                     {% endif %}
                                 >
                                     {{ cliente.nome }}
                                 </option>
-
                             {% endfor %}
-
                         </select>
                     </div>
 
-
                     <div class="form-group">
-                        <label for="valor_total">Valor total</label>
+                        <label for="valor_total">Valor estimado</label>
 
                         <input
                             type="number"
                             id="valor_total"
                             name="valor_total"
-                            value="{{ pedido.valor_total }}"
+                            value="{{ orcamento.valor_total }}"
                             step="0.01"
                             min="0"
                             required
                         >
                     </div>
 
-
                     <div class="form-group">
-                        <label for="data_pedido">Data do pedido</label>
+                        <label for="data_pedido">Data</label>
 
                         <input
                             type="date"
                             id="data_pedido"
                             name="data_pedido"
-                            value="{{ pedido.data_pedido }}"
+                            value="{{ orcamento.data_pedido }}"
                             required
                         >
                     </div>
-
-
-                    <div class="form-group">
-                        <label for="status">Status</label>
-
-                        <select
-                            id="status"
-                            name="status"
-                            required
-                        >
-                            <option
-                                value="Pendente"
-                                {% if pedido.status == "Pendente" %}selected{% endif %}
-                            >
-                                Pendente
-                            </option>
-
-                            <option
-                                value="Em andamento"
-                                {% if pedido.status == "Em andamento" %}selected{% endif %}
-                            >
-                                Em andamento
-                            </option>
-
-                            <option
-                                value="Concluído"
-                                {% if pedido.status == "Concluído" %}selected{% endif %}
-                            >
-                                Concluído
-                            </option>
-                        </select>
-                    </div>
-
 
                     <div class="form-group">
                         <label for="observacoes">Observações</label>
@@ -141,16 +96,15 @@
                             id="observacoes"
                             name="observacoes"
                             rows="4"
-                        >{{ pedido.observacoes or "" }}</textarea>
+                        >{{ orcamento.observacoes or "" }}</textarea>
                     </div>
-
 
                     <button type="submit">
                         Salvar alterações
                     </button>
 
                     <a
-                        href="{{ url_for('pedidos') }}"
+                        href="{{ url_for('orcamentos') }}"
                         class="button-link"
                     >
                         Cancelar
@@ -165,5 +119,4 @@
     </div>
 
 </body>
-
 </html>

@@ -52,9 +52,10 @@ def listar_pedidos() -> pd.DataFrame:
     try:
         conn = sqlite3.connect(get_db_path())
         df = pd.read_sql_query("""
-            SELECT p.*, c.nome as nome_cliente 
+            SELECT p.*, c.nome AS nome_cliente
             FROM pedido p
             LEFT JOIN cliente c ON p.id_cliente = c.id_cliente
+            WHERE p.status != 'Orçamento'
             ORDER BY p.id_pedido
         """, conn)
         conn.close()

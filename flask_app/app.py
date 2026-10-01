@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, abort
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -33,6 +33,11 @@ from back.pedidos import (
     deletar_pedido,
     obter_pedido,
     listar_clientes_para_pedido
+)
+
+from back.orcamentos import (
+    listar_orcamentos,
+    confirmar_orcamento
 )
 
 app = Flask(__name__)
@@ -206,6 +211,93 @@ def editar_pedido_rota(id_pedido):
 def excluir_pedido(id_pedido):
     deletar_pedido(id_pedido)
     return redirect(url_for("pedidos"))
+
+@app.route("/orcamentos", methods=["GET", "POST"])
+def orcamentos():
+
+    if request.method == "POST":
+        valor_total = request.form.get("valor_total")
+        data_pedido = request.form.get("data_pedido")
+        id_cliente = request.form.get("id_cliente")
+        observacoes = request.form.get("observacoes")
+
+        adicionar_pedido(
+            valor_total,
+            data_pedido,
+            "Orçamento",
+            id_cliente,
+            observacoes
+        )
+
+        return redirect(url_for("orcamentos"))
+
+    orcamentos_df = listar_orcamentos()
+    orcamentos_lista = orcamentos_df.to_dict(orient="records")
+
+    clientes_df = listar_clientes_para_pedido()
+    clientes = clientes_df.to_dict(orient="records")
+
+    return render_template(
+        "orcamentos.html",
+        orcamentos=orcamentos_lista,
+        clientes=clientes
+    )
+
+
+@app.route("/orcamentos/confirmar/<int:id_pedido>", methods=["POST"])
+def confirmar_orcamento_rota(id_pedido):
+    confirmar_orcamento(id_pedido)
+
+    return redirect(url_for("orcamentos"))
+
+
+@app.route("/orcamentos/editar/<int:id_pedido>", methods=["GET", "POST"])
+def editar_orcamento_rota(id_pedido):
+
+    orcamento = obter_pedido(id_pedido)
+
+    if not orcamento or orcamento["status"] != "Orçamento":
+        abort(404)
+
+    if request.method == "POST":
+        valor_total = request.form.get("valor_total")
+        data_pedido = request.form.get("data_pedido")
+        id_cliente = request.form.get("id_cliente")
+        observacoes = request.form.get("observacoes")
+
+        editar_pedido(
+            id_pedido,
+            valor_total,
+            data_pedido,
+            "Orçamento",
+            id_cliente,
+            observacoes
+        )
+
+        return redirect(url_for("orcamentos"))
+
+    clientes_df = listar_clientes_para_pedido()
+    clientes = clientes_df.to_dict(orient="records")
+
+    return render_template(
+        "editar_orcamento.html",
+        orcamento=orcamento,
+        clientes=clientes
+    )
+
+@app.route("/orcamentos/excluir/<int:id_pedido>", methods=["POST"])
+def excluir_orcamento(id_pedido):
+
+    orcamento = obter_pedido(id_pedido)
+
+    if not orcamento or orcamento["status"] != "Orçamento":
+        abort(404)
+
+    deletar_pedido(id_pedido)
+
+    return redirect(url_for("orcamentos"))
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

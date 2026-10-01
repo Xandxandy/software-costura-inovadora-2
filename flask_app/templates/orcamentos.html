@@ -1,11 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Pedidos - Costura Inovadora</title>
+    <title>Orçamentos - Costura Inovadora</title>
 
     <link
         rel="stylesheet"
@@ -14,41 +13,32 @@
 </head>
 
 <body>
-
     <div class="layout">
 
         <aside class="sidebar">
-
-            <h1>
-                Costura<br>
-                Inovadora
-            </h1>
+            <h1>Costura<br>Inovadora</h1>
 
             <nav aria-label="Menu principal">
                 <a href="{{ url_for('inicio') }}">Clientes</a>
-                <a href="{{ url_for('pedidos') }}" class="active">Pedidos</a>
+                <a href="{{ url_for('pedidos') }}">Pedidos</a>
                 <a href="{{ url_for('servicos') }}">Serviços</a>
-                <a href="{{ url_for('orcamentos') }}">Orçamentos</a>
+                <a href="{{ url_for('orcamentos') }}" class="active">
+                    Orçamentos
+                </a>
             </nav>
-
         </aside>
-
 
         <main class="content">
 
             <header class="page-header">
-                <div>
-                    <h2>Pedidos</h2>
-                    <p>Gerencie os pedidos do ateliê.</p>
-                </div>
+                <h2>Orçamentos</h2>
+                <p>Cadastre e acompanhe os orçamentos do ateliê.</p>
             </header>
 
-
             <section class="panel">
+                <h3>Novo orçamento</h3>
 
-                <h3>Cadastrar Pedido</h3>
-
-                <form method="POST" action="{{ url_for('pedidos') }}">
+                <form method="POST" action="{{ url_for('orcamentos') }}">
 
                     <div class="form-group">
                         <label for="id_cliente">Cliente</label>
@@ -58,22 +48,18 @@
                             name="id_cliente"
                             required
                         >
-                            <option value="">
-                                Selecione um cliente
-                            </option>
+                            <option value="">Selecione um cliente</option>
 
                             {% for cliente in clientes %}
                                 <option value="{{ cliente.id_cliente }}">
                                     {{ cliente.nome }}
                                 </option>
                             {% endfor %}
-
                         </select>
                     </div>
 
-
                     <div class="form-group">
-                        <label for="valor_total">Valor total</label>
+                        <label for="valor_total">Valor estimado</label>
 
                         <input
                             type="number"
@@ -86,9 +72,8 @@
                         >
                     </div>
 
-
                     <div class="form-group">
-                        <label for="data_pedido">Data do pedido</label>
+                        <label for="data_pedido">Data</label>
 
                         <input
                             type="date"
@@ -98,34 +83,6 @@
                         >
                     </div>
 
-
-                    <div class="form-group">
-                        <label for="status">Status</label>
-
-                        <select
-                            id="status"
-                            name="status"
-                            required
-                        >
-                            <option value="">
-                                Selecione um status
-                            </option>
-
-                            <option value="Pendente">
-                                Pendente
-                            </option>
-
-                            <option value="Em andamento">
-                                Em andamento
-                            </option>
-
-                            <option value="Concluído">
-                                Concluído
-                            </option>
-                        </select>
-                    </div>
-
-
                     <div class="form-group">
                         <label for="observacoes">Observações</label>
 
@@ -133,54 +90,45 @@
                             id="observacoes"
                             name="observacoes"
                             rows="4"
-                            placeholder="Informações adicionais sobre o pedido"
+                            placeholder="Descreva os serviços solicitados"
                         ></textarea>
                     </div>
 
-
-                    <button type="submit">
-                        Cadastrar Pedido
-                    </button>
-
+                    <button type="submit">Cadastrar orçamento</button>
                 </form>
-
             </section>
 
-
             <section class="panel">
+                <h3>Orçamentos cadastrados</h3>
 
-                <h3>Pedidos cadastrados</h3>
-
-                {% if pedidos %}
-
+                {% if orcamentos %}
                     <table>
-
                         <thead>
                             <tr>
                                 <th>Cliente</th>
                                 <th>Data</th>
-                                <th>Valor</th>
-                                <th>Status</th>
+                                <th>Valor estimado</th>
                                 <th>Observações</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
 
                         <tbody>
-
-                            {% for pedido in pedidos %}
-
+                            {% for orcamento in orcamentos %}
                                 <tr>
-                                    <td>{{ pedido.nome_cliente }}</td>
-                                    <td>{{ pedido.data_pedido }}</td>
-                                    <td>R$ {{ "%.2f"|format(pedido.valor_total) }}</td>
-                                    <td>{{ pedido.status }}</td>
-                                    <td>{{ pedido.observacoes or "-" }}</td>
+                                    <td>{{ orcamento.nome_cliente }}</td>
+                                    <td>{{ orcamento.data_pedido }}</td>
+                                    <td>
+                                        R$ {{ "%.2f"|format(orcamento.valor_total) }}
+                                    </td>
 
+                                    <td>{{ orcamento.observacoes or "-" }}</td>
+                                    
+                                    
                                     <td class="actions">
 
                                         <a
-                                            href="{{ url_for('editar_pedido_rota', id_pedido=pedido.id_pedido) }}"
+                                            href="{{ url_for('editar_orcamento_rota', id_pedido=orcamento.id_pedido) }}"
                                             class="button-link"
                                         >
                                             Editar
@@ -188,9 +136,19 @@
 
                                         <form
                                             method="POST"
-                                            action="{{ url_for('excluir_pedido', id_pedido=pedido.id_pedido) }}"
+                                            action="{{ url_for('confirmar_orcamento_rota', id_pedido=orcamento.id_pedido) }}"
                                             class="inline-form"
-                                            onsubmit="return confirmarExclusao('pedido')"
+                                        >
+                                            <button type="submit">
+                                                Confirmar
+                                            </button>
+                                        </form>
+
+                                        <form
+                                            method="POST"
+                                            action="{{ url_for('excluir_orcamento', id_pedido=orcamento.id_pedido) }}"
+                                            class="inline-form"
+                                            onsubmit="return confirmarExclusao('orçamento')"
                                         >
                                             <button type="submit" class="button-danger">
                                                 Excluir
@@ -198,30 +156,24 @@
                                         </form>
 
                                     </td>
+
                                 </tr>
 
                             {% endfor %}
 
                         </tbody>
-
                     </table>
-
                 {% else %}
-
                     <p class="empty-message">
-                        Nenhum pedido cadastrado.
+                        Nenhum orçamento cadastrado.
                     </p>
-
                 {% endif %}
-
             </section>
 
         </main>
-
     </div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
-
 </html>
