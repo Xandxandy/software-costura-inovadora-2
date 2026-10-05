@@ -49,7 +49,26 @@ def inicio():
         email = request.form.get("email")
         telefone = request.form.get("telefone")
 
-        adicionar_cliente(nome, telefone, email)
+        cep = request.form.get("cep", "")
+        logradouro = request.form.get("logradouro", "")
+        numero = request.form.get("numero", "")
+        complemento = request.form.get("complemento", "")
+        bairro = request.form.get("bairro", "")
+        cidade = request.form.get("cidade", "")
+        uf = request.form.get("uf", "")
+
+        adicionar_cliente(
+            nome,
+            telefone,
+            email,
+            cep,
+            logradouro,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            uf
+        )
 
         return redirect(url_for("inicio"))
 
@@ -66,7 +85,27 @@ def editar(id_cliente):
         telefone = request.form.get("telefone")
         email = request.form.get("email")
 
-        editar_cliente(id_cliente, nome, telefone, email)
+        cep = request.form.get("cep", "")
+        logradouro = request.form.get("logradouro", "")
+        numero = request.form.get("numero", "")
+        complemento = request.form.get("complemento", "")
+        bairro = request.form.get("bairro", "")
+        cidade = request.form.get("cidade", "")
+        uf = request.form.get("uf", "")
+
+        editar_cliente(
+            id_cliente,
+            nome,
+            telefone,
+            email,
+            cep,
+            logradouro,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            uf
+        )
 
         return redirect(url_for("inicio"))
 
