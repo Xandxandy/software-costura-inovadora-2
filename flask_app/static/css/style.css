@@ -191,3 +191,22 @@ th {
 .button-danger:hover {
     background: #702f2f;
 }
+
+.address-details {
+    margin: 20px 0;
+}
+
+.address-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 12px 0;
+}
+
+.address-details summary:hover {
+    text-decoration: underline;
+}
+
+.address-fields {
+    margin-top: 15px;
+    padding-top: 5px;
+}

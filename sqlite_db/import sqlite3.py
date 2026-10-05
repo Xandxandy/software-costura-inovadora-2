@@ -17,14 +17,20 @@ try:
     # Criação do cursos para realizar as operações sql
     cursor = conn.cursor()
 
-    # Código para criar as tabelas
     tabela_cliente = '''
     CREATE TABLE IF NOT EXISTS cliente (
         id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL CHECK (nome NOT GLOB '*[0-9]*'),
         telefone TEXT NOT NULL UNIQUE CHECK (telefone NOT GLOB '*[a-zA-Z]*'),
         email TEXT NOT NULL UNIQUE CHECK (email LIKE '%@%.%'),
-        status INTEGER DEFAULT 1
+        status INTEGER DEFAULT 1,
+        cep TEXT,
+        logradouro TEXT,
+        numero TEXT,
+        complemento TEXT,
+        bairro TEXT,
+        cidade TEXT,
+        uf TEXT
     );
     '''
     tabela_pedido = '''
@@ -71,6 +77,29 @@ try:
         cursor.execute("ALTER TABLE cliente ADD COLUMN status INTEGER DEFAULT 1")
         conn.commit()
         print("Coluna 'status' adicionada à tabela 'cliente'.")
+
+    # Garantir que as colunas de endereço existam na tabela cliente
+    cursor.execute("PRAGMA table_info(cliente)")
+    cliente_columns = [row[1] for row in cursor.fetchall()]
+
+    colunas_endereco = {
+        "cep": "TEXT",
+        "logradouro": "TEXT",
+        "numero": "TEXT",
+        "complemento": "TEXT",
+        "bairro": "TEXT",
+        "cidade": "TEXT",
+        "uf": "TEXT"
+    }
+
+    for coluna, tipo in colunas_endereco.items():
+        if coluna not in cliente_columns:
+            cursor.execute(
+                f"ALTER TABLE cliente ADD COLUMN {coluna} {tipo}"
+            )
+            print(f"Coluna '{coluna}' adicionada à tabela 'cliente'.")
+
+    conn.commit()
 
     # Garantir que a coluna observacoes exista em versões antigas do pedido
     cursor.execute("PRAGMA table_info(pedido)")
