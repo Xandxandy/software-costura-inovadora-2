@@ -87,6 +87,8 @@
                     <button
                         type="button"
                         id="mostrar-servicos"
+                        aria-controls="lista-servicos"
+                        aria-expanded="false"
                     >
                         Mostrar todos
                     </button>
@@ -100,11 +102,12 @@
             <p
                 id="mensagem-pesquisa-servico"
                 class="empty-message"
+                role="status"
+                aria-live="polite"
                 hidden
             >
                 Nenhum serviço encontrado.
             </p>
-
 
             <!-- Lista inicialmente oculta -->
             <div id="lista-servicos" hidden>
@@ -113,9 +116,9 @@
 
                     <thead>
                         <tr>
-                            <th>Serviço</th>
-                            <th>Preço base</th>
-                            <th>Ações</th>
+                            <th scope="col">Serviço</th>
+                            <th scope="col">Preço base</th>
+                            <th scope="col">Ações</th>
                         </tr>
                     </thead>
 

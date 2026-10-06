@@ -159,6 +159,8 @@
                     <button
                         type="button"
                         id="mostrar-pedidos"
+                        aria-controls="lista-pedidos"
+                        aria-expanded="false"
                     >
                         Mostrar todos
                     </button>
@@ -172,6 +174,8 @@
             <p
                 id="mensagem-pesquisa-pedido"
                 class="empty-message"
+                role="status"
+                aria-live="polite"
                 hidden
             >
                 Nenhum pedido encontrado.
@@ -185,12 +189,12 @@
 
                     <thead>
                         <tr>
-                            <th>Cliente</th>
-                            <th>Data</th>
-                            <th>Valor</th>
-                            <th>Status</th>
-                            <th>Observações</th>
-                            <th>Ações</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Valor</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Observações</th>
+                            <th scope="col">Ações</th>
                         </tr>
                     </thead>
 

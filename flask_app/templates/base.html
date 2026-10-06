@@ -17,6 +17,11 @@
 
 <body>
 
+    <!-- Atalho de acessibilidade para navegação por teclado -->
+    <a href="#conteudo-principal" class="skip-link">
+        Pular para o conteúdo principal
+    </a>
+
     <div class="layout">
 
         <aside class="sidebar">
@@ -28,6 +33,9 @@
                 <a
                     href="{{ url_for('inicio') }}"
                     class="{% if request.endpoint in ['inicio', 'editar', 'clientes_inativos'] %}active{% endif %}"
+                    {% if request.endpoint in ['inicio', 'editar', 'clientes_inativos'] %}
+                        aria-current="page"
+                    {% endif %}
                 >
                     Clientes
                 </a>
@@ -35,6 +43,9 @@
                 <a
                     href="{{ url_for('pedidos') }}"
                     class="{% if request.endpoint in ['pedidos', 'editar_pedido_rota'] %}active{% endif %}"
+                    {% if request.endpoint in ['pedidos', 'editar_pedido_rota'] %}
+                        aria-current="page"
+                    {% endif %}
                 >
                     Pedidos
                 </a>
@@ -42,6 +53,9 @@
                 <a
                     href="{{ url_for('servicos') }}"
                     class="{% if request.endpoint in ['servicos', 'editar_servico_rota'] %}active{% endif %}"
+                    {% if request.endpoint in ['servicos', 'editar_servico_rota'] %}
+                        aria-current="page"
+                    {% endif %}
                 >
                     Serviços
                 </a>
@@ -49,6 +63,9 @@
                 <a
                     href="{{ url_for('orcamentos') }}"
                     class="{% if request.endpoint in ['orcamentos', 'editar_orcamento_rota'] %}active{% endif %}"
+                    {% if request.endpoint in ['orcamentos', 'editar_orcamento_rota'] %}
+                        aria-current="page"
+                    {% endif %}
                 >
                     Orçamentos
                 </a>
@@ -57,7 +74,11 @@
 
         </aside>
 
-        <main class="content">
+        <main
+            id="conteudo-principal"
+            class="content"
+            tabindex="-1"
+        >
 
             {% block content %}
             {% endblock %}

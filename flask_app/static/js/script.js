@@ -138,9 +138,11 @@ function configurarPesquisaRegistros(configuracao) {
             mensagemPesquisa.hidden = true;
 
             botaoMostrar.textContent = "Mostrar todos";
+            botaoMostrar.setAttribute("aria-expanded", "false");
 
             registros.forEach(function (registro) {
                 registro.hidden = false;
+                botaoMostrar.setAttribute("aria-expanded", "true");
             });
 
             return;
@@ -198,6 +200,7 @@ function configurarPesquisaRegistros(configuracao) {
             mensagemPesquisa.hidden = true;
 
             botaoMostrar.textContent = "Ocultar lista";
+            botaoMostrar.setAttribute("aria-expanded", "true");
 
         } else {
 
@@ -207,6 +210,7 @@ function configurarPesquisaRegistros(configuracao) {
             campoPesquisa.value = "";
 
             botaoMostrar.textContent = "Mostrar todos";
+            botaoMostrar.setAttribute("aria-expanded", "false");
         }
     });
 }
