@@ -131,79 +131,134 @@
     </section>
 
 
-    <!-- Lista de pedidos -->
-    <section class="panel">
+        <!-- Lista de pedidos -->
+    <section class="panel" aria-labelledby="orders-list-title">
 
-        <h3>Pedidos cadastrados</h3>
+        <h3 id="orders-list-title">Pedidos cadastrados</h3>
 
         {% if pedidos %}
 
-            <table>
+            <!-- Ferramentas para localizar pedidos -->
+            <div class="record-search">
 
-                <thead>
-                    <tr>
-                        <th>Cliente</th>
-                        <th>Data</th>
-                        <th>Valor</th>
-                        <th>Status</th>
-                        <th>Observações</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
+                <div class="form-group">
+                    <label for="pesquisa-pedido">
+                        Pesquisar pedido
+                    </label>
+
+                    <input
+                        type="search"
+                        id="pesquisa-pedido"
+                        placeholder="Pesquise por cliente, data, valor, status ou observação"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="record-search-actions">
+
+                    <button
+                        type="button"
+                        id="mostrar-pedidos"
+                    >
+                        Mostrar todos
+                    </button>
+
+                </div>
+
+            </div>
 
 
-                <tbody>
+            <!-- Mensagem quando nenhum pedido for encontrado -->
+            <p
+                id="mensagem-pesquisa-pedido"
+                class="empty-message"
+                hidden
+            >
+                Nenhum pedido encontrado.
+            </p>
 
-                    {% for pedido in pedidos %}
 
+            <!-- Lista inicialmente oculta -->
+            <div id="lista-pedidos" hidden>
+
+                <table id="tabela-pedidos">
+
+                    <thead>
                         <tr>
-
-                            <td>{{ pedido.nome_cliente }}</td>
-
-                            <td>{{ pedido.data_pedido }}</td>
-
-                            <td>
-                                R$ {{ "%.2f"|format(pedido.valor_total) }}
-                            </td>
-
-                            <td>{{ pedido.status }}</td>
-
-                            <td>{{ pedido.observacoes or "-" }}</td>
-
-                            <td class="actions">
-
-                                <a
-                                    href="{{ url_for('editar_pedido_rota', id_pedido=pedido.id_pedido) }}"
-                                    class="button-link"
-                                >
-                                    Editar
-                                </a>
-
-                                <form
-                                    method="POST"
-                                    action="{{ url_for('excluir_pedido', id_pedido=pedido.id_pedido) }}"
-                                    class="inline-form"
-                                    onsubmit="return confirmarExclusao('pedido')"
-                                >
-
-                                    <button
-                                        type="submit"
-                                        class="button-danger"
-                                    >
-                                        Excluir
-                                    </button>
-
-                                </form>
-
-                            </td>
-
+                            <th>Cliente</th>
+                            <th>Data</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Observações</th>
+                            <th>Ações</th>
                         </tr>
+                    </thead>
 
-                    {% endfor %}
+                    <tbody>
 
-                </tbody>
+                        {% for pedido in pedidos %}
 
-            </table>
+                            <tr class="pedido-item">
+
+                                <td data-label="Cliente">
+                                    {{ pedido.nome_cliente }}
+                                </td>
+
+                                <td data-label="Data">
+                                    {{ pedido.data_pedido }}
+                                </td>
+
+                                <td data-label="Valor">
+                                    R$ {{ "%.2f"|format(pedido.valor_total) }}
+                                </td>
+
+                                <td data-label="Status">
+                                    {{ pedido.status }}
+                                </td>
+
+                                <td data-label="Observações">
+                                    {{ pedido.observacoes or "-" }}
+                                </td>
+
+                                <td
+                                    class="actions"
+                                    data-label="Ações"
+                                >
+
+                                    <a
+                                        href="{{ url_for('editar_pedido_rota', id_pedido=pedido.id_pedido) }}"
+                                        class="button-link"
+                                    >
+                                        Editar
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('excluir_pedido', id_pedido=pedido.id_pedido) }}"
+                                        class="inline-form"
+                                        onsubmit="return confirmarExclusao('pedido')"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="button-danger"
+                                        >
+                                            Excluir
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         {% else %}
 

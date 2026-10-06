@@ -164,79 +164,136 @@
 
         <h3 id="list-title">Clientes cadastrados</h3>
 
-        <a
-            href="{{ url_for('clientes_inativos') }}"
-            class="button-link"
-        >
-            Ver Clientes Inativos
-        </a>
-
-
         {% if clientes %}
 
-            <table>
+            <!-- Ferramentas para localizar clientes -->
+            <div class="client-search">
 
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Telefone</th>
-                        <th>Email</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
+                <div class="form-group">
+                    <label for="pesquisa-cliente">
+                        Pesquisar cliente
+                    </label>
+
+                    <input
+                        type="search"
+                        id="pesquisa-cliente"
+                        placeholder="Pesquise por nome, telefone ou e-mail"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="client-search-actions">
+
+                    <button
+                        type="button"
+                        id="mostrar-clientes"
+                    >
+                        Mostrar todos
+                    </button>
+
+                    <a
+                        href="{{ url_for('clientes_inativos') }}"
+                        class="button-link"
+                    >
+                        Ver Clientes Inativos
+                    </a>
+
+                </div>
+
+            </div>
 
 
-                <tbody>
+            <!-- Mensagem exibida quando a pesquisa não encontra resultados -->
+            <p
+                id="mensagem-pesquisa"
+                class="empty-message"
+                hidden
+            >
+                Nenhum cliente encontrado.
+            </p>
 
-                    {% for cliente in clientes %}
 
+            <!-- Lista inicialmente oculta -->
+            <div id="lista-clientes" hidden>
+
+                <table id="tabela-clientes">
+
+                    <thead>
                         <tr>
-
-                            <td>{{ cliente.nome }}</td>
-
-                            <td>{{ cliente.telefone }}</td>
-
-                            <td>{{ cliente.email }}</td>
-
-                            <td class="actions">
-
-                                <a
-                                    href="{{ url_for('editar', id_cliente=cliente.id_cliente) }}"
-                                    class="button-link"
-                                >
-                                    Editar
-                                </a>
-
-                                <form
-                                    method="POST"
-                                    action="{{ url_for('inativar', id_cliente=cliente.id_cliente) }}"
-                                    class="inline-form"
-                                >
-
-                                    <button
-                                        type="submit"
-                                        class="button-danger"
-                                    >
-                                        Inativar
-                                    </button>
-
-                                </form>
-
-                            </td>
-
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>Email</th>
+                            <th>Ações</th>
                         </tr>
+                    </thead>
 
-                    {% endfor %}
+                    <tbody>
 
-                </tbody>
+                        {% for cliente in clientes %}
 
-            </table>
+                            <tr class="cliente-item">
+
+                                <td data-label="Nome">
+                                    {{ cliente.nome }}
+                                </td>
+
+                                <td data-label="Telefone">
+                                    {{ cliente.telefone }}
+                                </td>
+
+                                <td data-label="Email">
+                                    {{ cliente.email }}
+                                </td>
+
+                                <td
+                                    class="actions"
+                                    data-label="Ações"
+                                >
+
+                                    <a
+                                        href="{{ url_for('editar', id_cliente=cliente.id_cliente) }}"
+                                        class="button-link"
+                                    >
+                                        Editar
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('inativar', id_cliente=cliente.id_cliente) }}"
+                                        class="inline-form"
+                                    >
+                                        <button
+                                            type="submit"
+                                            class="button-danger"
+                                        >
+                                            Inativar
+                                        </button>
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         {% else %}
 
             <p class="empty-message">
                 Nenhum cliente cadastrado.
             </p>
+
+            <a
+                href="{{ url_for('clientes_inativos') }}"
+                class="button-link"
+            >
+                Ver Clientes Inativos
+            </a>
 
         {% endif %}
 

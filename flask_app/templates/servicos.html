@@ -60,70 +60,118 @@
 
     </section>
 
-    <section class="panel">
+    <section class="panel" aria-labelledby="services-list-title">
 
-        <h3>Serviços cadastrados</h3>
+        <h3 id="services-list-title">Serviços cadastrados</h3>
 
         {% if servicos %}
 
-            <table>
+            <!-- Ferramentas para localizar serviços -->
+            <div class="record-search">
 
-                <thead>
-                    <tr>
-                        <th>Serviço</th>
-                        <th>Preço base</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
+                <div class="form-group">
+                    <label for="pesquisa-servico">
+                        Pesquisar serviço
+                    </label>
 
-                <tbody>
+                    <input
+                        type="search"
+                        id="pesquisa-servico"
+                        placeholder="Pesquise pelo nome ou preço"
+                        autocomplete="off"
+                    >
+                </div>
 
-                    {% for servico in servicos %}
+                <div class="record-search-actions">
 
+                    <button
+                        type="button"
+                        id="mostrar-servicos"
+                    >
+                        Mostrar todos
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Mensagem quando nenhum serviço for encontrado -->
+            <p
+                id="mensagem-pesquisa-servico"
+                class="empty-message"
+                hidden
+            >
+                Nenhum serviço encontrado.
+            </p>
+
+
+            <!-- Lista inicialmente oculta -->
+            <div id="lista-servicos" hidden>
+
+                <table id="tabela-servicos">
+
+                    <thead>
                         <tr>
-
-                            <td>
-                                {{ servico.nome_servico }}
-                            </td>
-
-                            <td>
-                                R$ {{ "%.2f"|format(servico.preco_base) }}
-                            </td>
-
-                            <td class="actions">
-
-                                <a
-                                    href="{{ url_for('editar_servico_rota', id_servico=servico.id_servico) }}"
-                                    class="button-link"
-                                >
-                                    Editar
-                                </a>
-
-                                <form
-                                    method="POST"
-                                    action="{{ url_for('excluir_servico', id_servico=servico.id_servico) }}"
-                                    class="inline-form"
-                                    onsubmit="return confirmarExclusao('serviço')"
-                                >
-
-                                    <button
-                                        type="submit"
-                                        class="button-danger"
-                                    >
-                                        Excluir
-                                    </button>
-
-                                </form>
-
-                            </td>
-
+                            <th>Serviço</th>
+                            <th>Preço base</th>
+                            <th>Ações</th>
                         </tr>
+                    </thead>
 
-                    {% endfor %}
+                    <tbody>
 
-                </tbody>
+                        {% for servico in servicos %}
 
-            </table>
+                            <tr class="servico-item">
+
+                                <td data-label="Serviço">
+                                    {{ servico.nome_servico }}
+                                </td>
+
+                                <td data-label="Preço base">
+                                    R$ {{ "%.2f"|format(servico.preco_base) }}
+                                </td>
+
+                                <td
+                                    class="actions"
+                                    data-label="Ações"
+                                >
+
+                                    <a
+                                        href="{{ url_for('editar_servico_rota', id_servico=servico.id_servico) }}"
+                                        class="button-link"
+                                    >
+                                        Editar
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('excluir_servico', id_servico=servico.id_servico) }}"
+                                        class="inline-form"
+                                        onsubmit="return confirmarExclusao('serviço')"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="button-danger"
+                                        >
+                                            Excluir
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         {% else %}
 

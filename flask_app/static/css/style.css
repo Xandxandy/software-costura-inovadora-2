@@ -1,4 +1,3 @@
-
 * {
     box-sizing: border-box;
 }
@@ -10,6 +9,11 @@ body {
     background: #f7f5f2;
 }
 
+
+/* --------------------------------------------------
+   Estrutura principal
+-------------------------------------------------- */
+
 .layout {
     display: flex;
     min-height: 100vh;
@@ -17,6 +21,7 @@ body {
 
 .sidebar {
     width: 240px;
+    flex-shrink: 0;
     padding: 28px 18px;
     background: #3f5146;
     color: white;
@@ -46,9 +51,21 @@ body {
     background: #64796b;
 }
 
+.sidebar nav a:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 2px;
+}
+
+
+/* --------------------------------------------------
+   Conteúdo
+-------------------------------------------------- */
+
 .content {
     flex: 1;
+    width: 100%;
     max-width: 1100px;
+    min-width: 0;
     padding: 40px;
     margin: 0 auto;
 }
@@ -67,6 +84,11 @@ body {
     color: #78716c;
 }
 
+
+/* --------------------------------------------------
+   Painéis
+-------------------------------------------------- */
+
 .panel {
     padding: 24px;
     margin-bottom: 22px;
@@ -78,6 +100,11 @@ body {
 .panel h3 {
     margin: 0 0 22px;
 }
+
+
+/* --------------------------------------------------
+   Formulários
+-------------------------------------------------- */
 
 .form-group {
     display: flex;
@@ -91,18 +118,33 @@ label {
     font-size: 14px;
 }
 
-input {
+input,
+select,
+textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid #d6d3d1;
     border-radius: 8px;
+    background: white;
+    color: #292524;
     font: inherit;
 }
 
-input:focus {
+textarea {
+    resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
     outline: 2px solid #64796b;
     outline-offset: 1px;
 }
+
+
+/* --------------------------------------------------
+   Botões
+-------------------------------------------------- */
 
 button {
     padding: 12px 18px;
@@ -118,57 +160,11 @@ button:hover {
     background: #2f4036;
 }
 
-.empty-message {
-    color: #78716c;
-}
-
-@media (max-width: 700px) {
-    .layout {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-    }
-
-    .sidebar h1 {
-        margin-bottom: 20px;
-    }
-
-    .sidebar nav {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-
-    .content {
-        padding: 22px 16px;
-    }
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #e7e5e4;
-}
-
-th {
-    font-size: 14px;
-}
-
-.actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.inline-form {
-    margin: 0;
+button:focus-visible,
+.button-link:focus-visible,
+.address-details summary:focus-visible {
+    outline: 3px solid #64796b;
+    outline-offset: 2px;
 }
 
 .button-link {
@@ -192,6 +188,71 @@ th {
     background: #702f2f;
 }
 
+.inline-form {
+    margin: 0;
+}
+
+
+/* --------------------------------------------------
+   Pesquisa de registros
+-------------------------------------------------- */
+
+.client-search,
+.record-search {
+    margin-bottom: 22px;
+}
+
+.client-search .form-group,
+.record-search .form-group {
+    margin-bottom: 12px;
+}
+
+.client-search-actions,
+.record-search-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+
+/* --------------------------------------------------
+   Tabelas
+-------------------------------------------------- */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #e7e5e4;
+}
+
+th {
+    font-size: 14px;
+}
+
+td {
+    overflow-wrap: anywhere;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+
+/* --------------------------------------------------
+   Endereço
+-------------------------------------------------- */
+
 .address-details {
     margin: 20px 0;
 }
@@ -209,4 +270,220 @@ th {
 .address-fields {
     margin-top: 15px;
     padding-top: 5px;
+}
+
+
+/* --------------------------------------------------
+   Mensagens
+-------------------------------------------------- */
+
+.empty-message {
+    color: #78716c;
+}
+
+
+/* --------------------------------------------------
+   Responsividade
+-------------------------------------------------- */
+
+@media (max-width: 700px) {
+
+    /*
+       Estrutura geral
+    */
+
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 20px 16px;
+    }
+
+    .sidebar h1 {
+        margin-bottom: 18px;
+        font-size: 21px;
+    }
+
+    .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .sidebar nav a {
+        flex: 1 1 calc(50% - 8px);
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .content {
+        padding: 22px 16px;
+    }
+
+    .page-header {
+        margin-bottom: 20px;
+    }
+
+    .page-header h2 {
+        font-size: 25px;
+    }
+
+
+    /*
+       Painéis
+    */
+
+    .panel {
+        padding: 18px 14px;
+    }
+
+
+    /*
+       Pesquisa
+    */
+
+    .client-search-actions,
+    .record-search-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .client-search-actions button,
+    .client-search-actions .button-link,
+    .record-search-actions button,
+    .record-search-actions .button-link {
+        width: 100%;
+        text-align: center;
+    }
+
+
+    /*
+       Tabelas transformadas em cards
+    */
+
+    table,
+    tbody,
+    tr,
+    td {
+        display: block;
+        width: 100%;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    tr {
+        padding: 14px;
+        border: 1px solid #e7e5e4;
+        border-radius: 10px;
+        background: #ffffff;
+    }
+
+    td {
+        display: grid;
+        grid-template-columns: minmax(90px, 35%) 1fr;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid #f0eeee;
+        font-size: 14px;
+        overflow-wrap: anywhere;
+    }
+
+    td:last-child {
+        border-bottom: 0;
+    }
+
+    td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #57534e;
+    }
+
+
+    /*
+       Ações dentro dos cards
+    */
+
+    td.actions {
+        display: grid;
+        grid-template-columns: minmax(90px, 35%) 1fr;
+        align-items: start;
+    }
+
+    td.actions::before {
+        grid-column: 1;
+    }
+
+    td.actions > a,
+    td.actions > form {
+        grid-column: 2;
+    }
+
+    td.actions .button-link,
+    td.actions button {
+        width: 100%;
+        text-align: center;
+    }
+
+
+    /*
+       Evita estouro de textos longos
+    */
+
+    td,
+    td a,
+    td p {
+        word-break: normal;
+        overflow-wrap: anywhere;
+    }
+}
+
+
+/* --------------------------------------------------
+   Celulares muito estreitos
+-------------------------------------------------- */
+
+@media (max-width: 420px) {
+
+    .content {
+        padding: 18px 12px;
+    }
+
+    .panel {
+        padding: 16px 12px;
+    }
+
+    .sidebar nav a {
+        min-width: 105px;
+        padding: 10px 8px;
+        font-size: 14px;
+    }
+
+    td {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    td.actions {
+        grid-template-columns: 1fr;
+    }
+
+    td.actions::before,
+    td.actions > a,
+    td.actions > form {
+        grid-column: 1;
+    }
+
+    td.actions::before {
+        margin-bottom: 4px;
+    }
 }
