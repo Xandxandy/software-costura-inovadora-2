@@ -37,6 +37,7 @@ def adicionar_cliente(
                 nome,
                 telefone,
                 email,
+                status,
                 cep,
                 logradouro,
                 numero,
@@ -45,12 +46,13 @@ def adicionar_cliente(
                 cidade,
                 uf
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 nome,
                 telefone,
                 email,
+                1,
                 cep,
                 logradouro,
                 numero,
