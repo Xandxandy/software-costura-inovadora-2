@@ -97,87 +97,140 @@
 
 
     <!-- Lista de orçamentos -->
-    <section class="panel">
+    <section class="panel" aria-labelledby="budgets-list-title">
 
-        <h3>Orçamentos cadastrados</h3>
+        <h3 id="budgets-list-title">Orçamentos cadastrados</h3>
 
         {% if orcamentos %}
 
-            <table>
+            <!-- Ferramentas para localizar orçamentos -->
+            <div class="record-search">
 
-                <thead>
-                    <tr>
-                        <th>Cliente</th>
-                        <th>Data</th>
-                        <th>Valor estimado</th>
-                        <th>Observações</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
+                <div class="form-group">
+                    <label for="pesquisa-orcamento">
+                        Pesquisar orçamento
+                    </label>
+
+                    <input
+                        type="search"
+                        id="pesquisa-orcamento"
+                        placeholder="Pesquise por cliente, data, valor ou observação"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="record-search-actions">
+
+                    <button
+                        type="button"
+                        id="mostrar-orcamentos"
+                        aria-controls="lista-orcamentos"
+                        aria-expanded="false"
+                    >
+                        Mostrar todos
+                    </button>
+
+                </div>
+
+            </div>
 
 
-                <tbody>
+            <!-- Mensagem quando nenhum orçamento for encontrado -->
+            <p
+                id="mensagem-pesquisa-orcamento"
+                class="empty-message"
+                role="status"
+                aria-live="polite"
+                hidden
+            >
+                Nenhum orçamento encontrado.
+            </p>
 
-                    {% for orcamento in orcamentos %}
 
+            <!-- Lista inicialmente oculta -->
+            <div id="lista-orcamentos" hidden>
+
+                <table id="tabela-orcamentos">
+
+                    <thead>
                         <tr>
-
-                            <td>{{ orcamento.nome_cliente }}</td>
-
-                            <td>{{ orcamento.data_pedido }}</td>
-
-                            <td>
-                                R$ {{ "%.2f"|format(orcamento.valor_total) }}
-                            </td>
-
-                            <td>{{ orcamento.observacoes or "-" }}</td>
-
-                            <td class="actions">
-
-                                <a
-                                    href="{{ url_for('editar_orcamento_rota', id_pedido=orcamento.id_pedido) }}"
-                                    class="button-link"
-                                >
-                                    Editar
-                                </a>
-
-                                <form
-                                    method="POST"
-                                    action="{{ url_for('confirmar_orcamento_rota', id_pedido=orcamento.id_pedido) }}"
-                                    class="inline-form"
-                                >
-
-                                    <button type="submit">
-                                        Confirmar
-                                    </button>
-
-                                </form>
-
-                                <form
-                                    method="POST"
-                                    action="{{ url_for('excluir_orcamento', id_pedido=orcamento.id_pedido) }}"
-                                    class="inline-form"
-                                    onsubmit="return confirmarExclusao('orçamento')"
-                                >
-
-                                    <button
-                                        type="submit"
-                                        class="button-danger"
-                                    >
-                                        Excluir
-                                    </button>
-
-                                </form>
-
-                            </td>
-
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Valor estimado</th>
+                            <th scope="col">Observações</th>
+                            <th scope="col">Ações</th>
                         </tr>
+                    </thead>
 
-                    {% endfor %}
+                    <tbody>
 
-                </tbody>
+                        {% for orcamento in orcamentos %}
 
-            </table>
+                            <tr class="orcamento-item">
+
+                                <td data-label="Cliente">
+                                    {{ orcamento.nome_cliente }}
+                                </td>
+
+                                <td data-label="Data">
+                                    {{ orcamento.data_pedido }}
+                                </td>
+
+                                <td data-label="Valor estimado">
+                                    R$ {{ "%.2f"|format(orcamento.valor_total) }}
+                                </td>
+
+                                <td data-label="Observações">
+                                    {{ orcamento.observacoes or "-" }}
+                                </td>
+
+                                <td
+                                    class="actions"
+                                    data-label="Ações"
+                                >
+
+                                    <a
+                                        href="{{ url_for('editar_orcamento_rota', id_pedido=orcamento.id_pedido) }}"
+                                        class="button-link"
+                                    >
+                                        Editar
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('confirmar_orcamento_rota', id_pedido=orcamento.id_pedido) }}"
+                                        class="inline-form"
+                                    >
+                                        <button type="submit">
+                                            Confirmar
+                                        </button>
+                                    </form>
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('excluir_orcamento', id_pedido=orcamento.id_pedido) }}"
+                                        class="inline-form"
+                                        onsubmit="return confirmarExclusao('orçamento')"
+                                    >
+                                        <button
+                                            type="submit"
+                                            class="button-danger"
+                                        >
+                                            Excluir
+                                        </button>
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         {% else %}
 
