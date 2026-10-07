@@ -69,7 +69,7 @@ def test_cadastro_cliente(monkeypatch):
     cliente = app.test_client()
 
     resposta = cliente.post(
-        "/",
+        "/clientes",
         data={
             "nome": "Cliente Teste",
             "telefone": "11999999999",

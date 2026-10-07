@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Início - Costura Inovadora{% endblock %}
+
+{% block content %}
+
+    <section class="dashboard">
+
+        <div class="dashboard-brand">
+
+            <img
+                src="{{ url_for('static', filename='img/logo-costura-inovadora.png') }}"
+                alt="Costura Inovadora"
+                class="dashboard-logo"
+            >
+
+            <div class="dashboard-welcome">
+                <h2>Bem-vinda à Costura Inovadora</h2>
+
+                <p>
+                    Acesse rapidamente as principais áreas do sistema.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-links">
+
+            <a
+                href="{{ url_for('clientes') }}"
+                class="dashboard-card"
+            >
+                <h3>Clientes</h3>
+
+                <p>
+                    Cadastre, consulte e gerencie os clientes.
+                </p>
+
+                <span>Gerenciar clientes →</span>
+            </a>
+
+
+            <a
+                href="{{ url_for('pedidos') }}"
+                class="dashboard-card"
+            >
+                <h3>Pedidos</h3>
+
+                <p>
+                    Acompanhe e gerencie os pedidos do ateliê.
+                </p>
+
+                <span>Gerenciar pedidos →</span>
+            </a>
+
+
+            <a
+                href="{{ url_for('servicos') }}"
+                class="dashboard-card"
+            >
+                <h3>Serviços</h3>
+
+                <p>
+                    Cadastre e consulte os serviços oferecidos.
+                </p>
+
+                <span>Gerenciar serviços →</span>
+            </a>
+
+
+            <a
+                href="{{ url_for('orcamentos') }}"
+                class="dashboard-card"
+            >
+                <h3>Orçamentos</h3>
+
+                <p>
+                    Cadastre e acompanhe os orçamentos.
+                </p>
+
+                <span>Gerenciar orçamentos →</span>
+            </a>
+
+        </div>
+
+
+        <section class="dashboard-summary">
+
+            <div class="summary-header">
+                <div>
+                    <h3>Resumo do ateliê</h3>
+                    <p>
+                        Visão geral da situação atual dos pedidos e orçamentos.
+                    </p>
+                </div>
+
+                <a href="{{ url_for('pedidos') }}">
+                    Ver pedidos →
+                </a>
+            </div>
+
+            <div class="summary-grid">
+
+                <div class="summary-item">
+                    <strong>{{ resumo.pendentes }}</strong>
+                    <span>Pedidos pendentes</span>
+                </div>
+
+                <div class="summary-item">
+                    <strong>{{ resumo.em_andamento }}</strong>
+                    <span>Em andamento</span>
+                </div>
+
+                <div class="summary-item">
+                    <strong>{{ resumo.concluidos }}</strong>
+                    <span>Concluídos</span>
+                </div>
+
+                <div class="summary-item">
+                    <strong>{{ resumo.orcamentos }}</strong>
+                    <span>Orçamentos</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="recent-orders">
+
+            <div class="recent-orders-header">
+                <div>
+                    <h3>Pedidos recentes</h3>
+                    <p>Últimos pedidos cadastrados no sistema.</p>
+                </div>
+
+                <a href="{{ url_for('pedidos') }}">
+                    Ver todos os pedidos →
+                </a>
+            </div>
+
+            {% if pedidos_recentes %}
+
+                <div class="recent-orders-table">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Cliente</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Valor</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for pedido in pedidos_recentes %}
+
+                                <tr>
+                                    <td data-label="Cliente">
+                                        {{ pedido.nome_cliente }}
+                                    </td>
+
+                                    <td data-label="Data">
+                                        {{ pedido.data_pedido }}
+                                    </td>
+
+                                    <td data-label="Status">
+                                        <span class="status-badge
+                                            {% if pedido.status == 'Pendente' %}
+                                                status-pendente
+                                            {% elif pedido.status == 'Em andamento' %}
+                                                status-andamento
+                                            {% elif pedido.status == 'Concluído' %}
+                                                status-concluido
+                                            {% endif %}
+                                        ">
+                                            {{ pedido.status }}
+                                        </span>
+                                    </td>
+
+                                    <td data-label="Valor">
+                                        R$ {{ "%.2f"|format(pedido.valor_total)|replace(".", ",") }}
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <p class="empty-message">
+                    Nenhum pedido cadastrado.
+                </p>
+
+            {% endif %}
+
+        </section>
+
+    </section>
+
+{% endblock %}

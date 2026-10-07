@@ -26,14 +26,28 @@
 
         <aside class="sidebar">
 
-            <h1>Costura<br>Inovadora</h1>
+            <div class="sidebar-brand">
+                <h1>Costura<br>Inovadora</h1>
+                <p>Gestão do ateliê</p>
+                <div class="sidebar-stitch" aria-hidden="true"></div>
+            </div>
 
             <nav aria-label="Menu principal">
 
                 <a
                     href="{{ url_for('inicio') }}"
-                    class="{% if request.endpoint in ['inicio', 'editar', 'clientes_inativos'] %}active{% endif %}"
-                    {% if request.endpoint in ['inicio', 'editar', 'clientes_inativos'] %}
+                    class="{% if request.endpoint == 'inicio' %}active{% endif %}"
+                    {% if request.endpoint == 'inicio' %}
+                        aria-current="page"
+                    {% endif %}
+                >
+                    Início
+                </a>
+
+                <a
+                    href="{{ url_for('clientes') }}"
+                    class="{% if request.endpoint in ['clientes', 'editar', 'clientes_inativos'] %}active{% endif %}"
+                    {% if request.endpoint in ['clientes', 'editar', 'clientes_inativos'] %}
                         aria-current="page"
                     {% endif %}
                 >
@@ -73,6 +87,13 @@
             </nav>
 
         </aside>
+
+        <div class="sewing-divider" aria-hidden="true">
+            <img
+                src="{{ url_for('static', filename='img/detalhe-costura.png') }}"
+                alt=""
+            >
+        </div>
 
         <main
             id="conteudo-principal"

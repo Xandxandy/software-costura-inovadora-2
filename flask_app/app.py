@@ -32,7 +32,10 @@ from back.pedidos import (
     editar_pedido,
     deletar_pedido,
     obter_pedido,
-    listar_clientes_para_pedido
+    listar_clientes_para_pedido,
+    contar_pedidos_pendentes,
+    obter_resumo_pedidos,
+    listar_pedidos_recentes
 )
 
 from back.orcamentos import (
@@ -42,8 +45,29 @@ from back.orcamentos import (
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def inicio():
+    resumo = obter_resumo_pedidos()
+
+    pedidos_recentes_df = listar_pedidos_recentes(4)
+    if not pedidos_recentes_df.empty:
+        pedidos_recentes_df["data_pedido"] = (
+            pedidos_recentes_df["data_pedido"]
+            .astype(str)
+            .str.split("-")
+            .str[::-1]
+            .str.join("/")
+        )
+    pedidos_recentes = pedidos_recentes_df.to_dict(orient="records")
+
+    return render_template(
+        "inicio.html",
+        resumo=resumo,
+        pedidos_recentes=pedidos_recentes
+    )
+
+@app.route("/clientes", methods=["GET", "POST"])
+def clientes():
     if request.method == "POST":
         nome = request.form.get("nome")
         email = request.form.get("email")
@@ -70,12 +94,15 @@ def inicio():
             uf
         )
 
-        return redirect(url_for("inicio"))
+        return redirect(url_for("clientes"))
 
     clientes_df = listar_clientes()
-    clientes = clientes_df.to_dict(orient="records")
+    clientes_lista = clientes_df.to_dict(orient="records")
 
-    return render_template("index.html", clientes=clientes)
+    return render_template(
+        "index.html",
+        clientes=clientes_lista
+    )
 
 @app.route("/editar/<int:id_cliente>", methods=["GET", "POST"])
 def editar(id_cliente):
@@ -107,7 +134,7 @@ def editar(id_cliente):
             uf
         )
 
-        return redirect(url_for("inicio"))
+        return redirect(url_for("clientes"))
 
     cliente = obter_cliente(id_cliente)
 
@@ -121,7 +148,7 @@ def inativar(id_cliente):
 
     inativar_cliente(id_cliente)
 
-    return redirect(url_for("inicio"))
+    return redirect(url_for("clientes"))
 
 @app.route("/clientes/inativos")
 def clientes_inativos():

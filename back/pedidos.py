@@ -64,6 +64,111 @@ def listar_pedidos() -> pd.DataFrame:
         print(f"Erro ao listar pedidos: {e}")
         return pd.DataFrame()
 
+def contar_pedidos_pendentes() -> int:
+    """Retorna a quantidade de pedidos com status Pendente."""
+    try:
+        conn = sqlite3.connect(get_db_path())
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "SELECT COUNT(*) FROM pedido WHERE status = ?",
+            ("Pendente",)
+        )
+
+        quantidade = cursor.fetchone()[0]
+
+        conn.close()
+
+        return quantidade
+
+    except sqlite3.Error as e:
+        print(f"Erro ao contar pedidos pendentes: {e}")
+        return 0
+
+def obter_resumo_pedidos() -> dict:
+    """Retorna as quantidades de pedidos por status e de orçamentos."""
+    resumo = {
+        "pendentes": 0,
+        "em_andamento": 0,
+        "concluidos": 0,
+        "orcamentos": 0
+    }
+
+    try:
+        conn = sqlite3.connect(get_db_path())
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT status, COUNT(*)
+            FROM pedido
+            GROUP BY status
+        """)
+
+        resultados = cursor.fetchall()
+
+        conn.close()
+
+        for status, quantidade in resultados:
+            if status == "Pendente":
+                resumo["pendentes"] = quantidade
+
+            elif status == "Em andamento":
+                resumo["em_andamento"] = quantidade
+
+            elif status == "Concluído":
+                resumo["concluidos"] = quantidade
+
+            elif status == "Orçamento":
+                resumo["orcamentos"] = quantidade
+
+        return resumo
+
+    except sqlite3.Error as e:
+        print(f"Erro ao obter resumo dos pedidos: {e}")
+        return resumo
+
+def listar_pedidos_recentes(limite: int = 4):
+    """Retorna os pedidos mais recentes, excluindo orçamentos."""
+    try:
+        conn = sqlite3.connect(get_db_path())
+
+        df = pd.read_sql_query(
+            """
+            SELECT
+                p.id_pedido,
+                p.data_pedido,
+                p.status,
+                p.valor_total,
+                p.observacoes,
+                c.nome AS nome_cliente
+            FROM pedido p
+            LEFT JOIN cliente c
+                ON p.id_cliente = c.id_cliente
+            WHERE p.status != 'Orçamento'
+            ORDER BY p.id_pedido DESC
+            LIMIT ?
+            """,
+            conn,
+            params=(limite,)
+        )
+
+        conn.close()
+
+        return df
+
+    except Exception as e:
+        print(f"Erro ao listar pedidos recentes: {e}")
+
+        return pd.DataFrame(
+            columns=[
+                "id_pedido",
+                "data_pedido",
+                "status",
+                "valor_total",
+                "observacoes",
+                "nome_cliente"
+            ]
+        )
 
 def editar_pedido(id_pedido: int, valor_total: float, data_pedido: str, status: str, id_cliente: int, observacoes: str = None) -> bool:
     """Edita um pedido existente.
